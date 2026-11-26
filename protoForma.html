@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es"><head>
+<!-- FORMA prototipo final. Notas para desarrollo: ver el comentario al inicio del bloque de codigo JavaScript. --><meta charset="utf-8"><title>FORMA · Prototipo</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{--bg:#f4f2ee;--card:#fff;--ink:#17181c;--mut:#5f6168;--line:#dcd9d2;--acc:#c2410c;--acc-t:#fff;--soft:#fdebd8;--ok:#166534;--okb:#dcfce7;--warn:#92400e;--warnb:#fef3c7;--bad:#991b1b;--badb:#fee2e2;--nav:#17181c;--fill:#faf9f6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101114;--card:#1b1c21;--ink:#f1efe9;--mut:#a4a6ae;--line:#33353c;--acc:#ea6a2a;--acc-t:#16100c;--soft:#3a2417;--ok:#86efac;--okb:#14351f;--warn:#fcd34d;--warnb:#3b2f0e;--bad:#fca5a5;--badb:#3d1717;--nav:#0a0a0c;--fill:#202228;color-scheme:dark}}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 "Hanken Grotesk",system-ui,sans-serif}
+button,input,select,textarea{font:inherit;color:inherit}
+.nav{background:var(--nav);color:#f1efe9;display:flex;justify-content:space-between;align-items:center;padding:12px 20px;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+.logo{letter-spacing:.3em;font-weight:700}
+.av{width:34px;height:34px;border-radius:50%;background:#f97316;color:#17181c;font-weight:600;border:0;cursor:pointer}
+.menu{position:absolute;right:16px;top:54px;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px;min-width:170px}
+.menu button{display:block;width:100%;text-align:left;background:none;border:0;padding:8px 10px;cursor:pointer;border-radius:6px}.menu button:hover{background:var(--fill)}
+main{max-width:1000px;margin:0 auto;padding:22px 16px 60px}
+h1{font-size:28px;margin:0 0 2px}h2{font-size:17px;margin:0 0 10px}.mut{color:var(--mut)}.sm{font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:12px}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.sp{justify-content:space-between}.grow{flex:1}
+.btn{border:1px solid var(--ink);background:none;border-radius:9px;padding:8px 14px;cursor:pointer}
+.btn.p{background:var(--acc);border-color:var(--acc);color:var(--acc-t);font-weight:600}.btn.s{padding:5px 10px;font-size:13px}
+.btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,.tab:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+input,select,textarea{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+label{display:block;font-size:13px;font-weight:600;margin-bottom:3px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--fill);border:1px solid var(--line)}
+.chip.ok{background:var(--okb);color:var(--ok);border-color:transparent}.chip.warn{background:var(--warnb);color:var(--warn);border-color:transparent}.chip.bad{background:var(--badb);color:var(--bad);border-color:transparent}
+.tbl{width:100%;border-collapse:collapse}.tbl th{text-align:left;font-size:12px;color:var(--mut);font-weight:500;padding:8px;border-bottom:1px solid var(--line)}
+.tbl td{padding:10px 8px;border-bottom:1px solid var(--line)}.tbl tr.click{cursor:pointer}.tbl tr.click:hover{background:var(--fill)}
+.ini{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--soft);color:var(--acc);font-weight:600;font-size:13px;margin-right:8px}
+.dots span{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--line);margin-right:4px}.dots span.on{background:var(--ok)}
+.tabs{display:flex;gap:4px;border-bottom:1px solid var(--line);margin:14px 0;overflow-x:auto}
+.tab{background:none;border:0;padding:10px 12px;cursor:pointer;color:var(--mut);border-bottom:3px solid transparent;white-space:nowrap}.tab.on{color:var(--ink);font-weight:600;border-color:var(--acc)}
+.day>summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600}.day>summary::-webkit-details-marker{display:none}
+.ex{padding:12px 0;border-top:1px solid var(--line)}
+.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px;margin-top:8px}
+.set{background:var(--fill);border:1px solid var(--line);border-radius:10px;padding:8px}.set.done{background:var(--okb);border-color:transparent}
+.set .row{flex-wrap:nowrap;gap:6px}.set input{padding:8px 6px;text-align:center}
+.ck{flex:none;width:38px;height:38px;border-radius:8px;border:1px solid var(--line);background:var(--card);cursor:pointer}.set.done .ck{background:var(--ok);color:var(--okb);border-color:var(--ok)}
+.by{font-size:11px;color:var(--mut);margin-top:4px}
+.rowc:hover{background:var(--fill)}
+.mo{display:none}@media(max-width:700px){.mo{display:block}}
+.crumbs{display:flex;flex-wrap:wrap;gap:6px;font-size:13px;color:var(--mut);margin-bottom:6px}.crumbs a{color:var(--acc)}.crumbs b{color:var(--ink)}
+.bar{height:8px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;background:var(--acc)}
+.banner{background:var(--warnb);color:var(--warn);padding:10px 14px;border-radius:10px;margin-bottom:12px;font-weight:500}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.5);display:grid;place-items:center;padding:16px;z-index:20}
+.modal>div{background:var(--card);border-radius:14px;padding:20px;max-width:520px;width:100%;max-height:90vh;overflow:auto}
+.toast{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:13px;z-index:30}
+.login{min-height:100vh;display:grid;grid-template-columns:1fr 1fr}.login .l{background:var(--nav);color:#f1efe9;padding:40px;display:flex;flex-direction:column;justify-content:center}.login .l h1{font-size:40px}
+.login .r{padding:40px;display:flex;flex-direction:column;justify-content:center;max-width:440px;margin:auto;width:100%}
+.demo{display:grid;gap:8px;margin-top:14px}
+@media(max-width:700px){.login{grid-template-columns:1fr}.login .l{padding:24px}.login .l h1{font-size:28px}.tbl .hm{display:none}}
+</style></head><body><div id="app"></div><div id="modal"></div><div id="toast"></div>
+<script>
+/* ============================================================================
+   FORMA - PROTOTIPO FINAL - NOTAS PARA DESARROLLO
+   ============================================================================
+   Este archivo es un prototipo navegable (HTML + JS sin dependencias). Todo vive
+   en memoria: al recargar vuelve al estado inicial. Los comentarios "REGLA:"
+   repartidos por el codigo marcan las reglas de negocio acordadas.
+
+   0. QUE ES SIMULADO EN EL PROTOTIPO (NO COPIAR A PRODUCCION)
+   - Fecha actual fija: sabado 14 nov 2026 (TD / TODAY). Usar la fecha real.
+   - Historial de entrenamientos, series de semanas anteriores y datos de la
+     grafica por ejercicio (funciones sessions, exPast, bw): son SIMULADOS.
+     En produccion: guardar cada serie confirmada (cliente, ejercicio, fecha,
+     kg, reps, quien la registro, marca de tiempo) y derivar de ahi las semanas
+     anteriores, la grafica y los estados Entrenado / No entrenado.
+   - Estados del calendario (Entrenado / No entrenado) de semanas pasadas y la
+     adherencia semanal usan datos de ejemplo (campo c.done).
+   - Pagos, vencimientos y notificaciones de vencimiento son datos sembrados;
+     en produccion los genera un proceso programado.
+   - Login con accesos de demostracion; no hay autenticacion real.
+   - Clientes de entrenadores 2 y 3 son parciales (campo x = clientes no cargados).
+
+   1. ROLES Y PERMISOS
+   - Superadmin: crea, edita, suspende y reactiva entrenadores (limite de
+     clientes opcional); ve el detalle de entrenadores y clientes (solo
+     informativo); asigna y reasigna clientes; administra la biblioteca de
+     ejercicios (puede editar y eliminar cualquier ejercicio).
+   - Entrenador: administra SOLO sus clientes. Crea clientes (con valoracion
+     inicial), rutinas, nutricion, horarios, pagos y valoraciones; aplaza y
+     cancela entrenamientos (sin aprobacion); aprueba o rechaza aplazamientos
+     solicitados por el cliente; crea ejercicios propios.
+   - Cliente: ve su informacion; registra entrenamiento (solo el dia actual),
+     valoraciones, horario real si no tiene horario asignado; solicita aplazar y
+     cancela entrenamientos.
+   - Entrenador suspendido: conserva su detalle y puede reactivarse; no se le
+     pueden asignar clientes; sus clientes pierden acceso mientras dure.
+   - Acceso: se crea con enlace de invitacion (el usuario define su contrasena).
+     Primer ingreso: cambio de contrasena con validacion en vivo + aceptacion de
+     terminos y tratamiento de datos de salud. Falta pantalla de recuperacion.
+
+   2. REASIGNACION DE CLIENTES (doRe / askRe)
+   - Al cambiar de entrenador se guarda una "foto" del registro (WK) del
+     entrenador anterior. Si el cliente vuelve a un entrenador con el que ya
+     estuvo, el superadmin elige: RETOMAR (recupera rutina, progreso, pagos y
+     nutricion; el conteo de semanas continua desde la semana en que se fue) o
+     EMPEZAR DE NUEVO (registro vacio, semana 1; el anterior se archiva).
+   - Con un entrenador nuevo siempre es registro nuevo, semana 1.
+   - Respeta el limite de clientes del entrenador destino.
+   - Notifica al cliente, al nuevo entrenador y al superadmin.
+   - Modelo sugerido: entidad "Vinculo cliente-entrenador" con fecha inicio/fin,
+     estado y todos los datos colgando del vinculo.
+
+   3. BIBLIOTECA DE EJERCICIOS
+   - Compartida: todos los ejercicios son visibles para todos, sin importar
+     quien los creo (campo by). Entrenador edita/elimina solo los suyos; el
+     superadmin cualquiera. No hay "duplicar y editar".
+   - Sin duplicados: al escribir el nombre, el sistema busca coincidencias
+     (ignora tildes, mayusculas y plurales; funciones sim / dupMatches / dupChk).
+     Nivel 1.0 = ya existe (bloquea guardar); >= 0.8 = muy parecido (advierte);
+     >= 0.5 = relacionado. "Usar este" lleva al ejercicio o lo agrega al dia.
+     Validar tambien en servidor. Pendiente: decidir si el equipo hace parte de
+     la identidad del ejercicio.
+   - Tipo de medida por ejercicio: repeticiones o tiempo (segundos).
+
+   4. RUTINA (EDITOR)
+   - Dias configurables: agregar, quitar (no se puede quitar uno con
+     entrenamiento registrado), reordenar ejercicios (arrastrar + flechas).
+   - Nombre del dia automatico segun grupos musculares en el orden elegido
+     ("Dia 1 - Espalda y pecho"); si el entrenador lo edita deja de ser
+     automatico; si lo borra vuelve a serlo (genName).
+   - Por ejercicio: series, repeticiones o segundos, descanso, nota.
+   - Plantillas de rutina y nutricion: guardar, aplicar (reemplaza el editor,
+     no guarda hasta confirmar), eliminar. Falta renombrar.
+   - Aviso de cambios sin guardar al salir (modal + beforeunload).
+
+   5. HORARIO DEL ENTRENAMIENTO
+   - Cada dia de rutina puede tener dia de la semana + hora inicio + hora fin
+     (opcional). El switch "Horario asignado" vive en el editor de rutina.
+   - Con horario asignado: lo define el entrenador, lo ve el cliente, alimenta la
+     agenda. Sin horario asignado: el cliente registra fecha, inicio y fin de
+     cada entrenamiento y el entrenador lo ve (en la rutina y en su agenda).
+   - NUNCA se muestra ni se guarda si el cliente es "virtual"; solo se sabe si
+     tiene horario o no (chips "Con horario" / "Sin horario").
+   - Fin siempre posterior al inicio. Los horarios se conservan al apagar el
+     switch y al aplicar plantillas.
+
+   6. AGENDA DEL ENTRENADOR (pantalla de inicio)
+   - Calendario del mes (una fila por semana, contador de sesiones por dia) y
+     detalle de la semana seleccionada con scroll interno; solo muestra dias con
+     sesiones. Boton "Hoy": va al mes/semana actual y hace scroll al dia de hoy.
+     Tocar un dia hace scroll a su detalle. Barra con acceso a "Mis clientes".
+   - Convencion general: SIN scroll infinito. Listas largas = paginadas (5-6
+     por pagina) o con contenedor de altura limitada; secciones largas =
+     desplegables (details) y su estado abierto/cerrado se recuerda. NO quitar.
+
+   7. REGISTRO DE ENTRENAMIENTO (rutina semanal)
+   - Navegacion por flechas entre semanas; la semana se calcula desde la fecha de
+     inicio del vinculo (semana N de entrenamiento). No hay semana < 1.
+   - Semana actual: solo se registra el entrenamiento del DIA ACTUAL. Antes hay
+     que marcar "Hoy si entrene" / "Marcar entrenamiento realizado" (confirma,
+     guarda quien y cuando, NO se puede deshacer). Solo entonces se ven los
+     campos de kg y reps. Cada serie se confirma con la marca; confirmada queda
+     bloqueada (no se edita ni se desmarca). Otros dias de la semana: consulta.
+   - Semanas anteriores: solo consulta, con detalle de cada ejercicio ejecutado
+     de los dias completados. Semanas siguientes: solo consulta (metas).
+   - Todos los bloques de dia son desplegables. Comentario del dia (cliente ->
+     entrenador). Ultima vez por ejercicio.
+   - Estados del dia: Pendiente / En progreso / Completado. Un dia que termina sin
+     registro queda "No entrenado" (rojo).
+
+   8. APLAZAR / MOVER / CANCELAR ENTRENAMIENTO (planOf, ppOpen, ppSave, ppRes)
+   - Solo sobre dias PROGRAMADOS que aun no llegan y no estan entrenados ni
+     cancelados. Un dia ya entrenado o no entrenado NO se puede aplazar ni
+     cancelar. Nunca se mueve hacia atras (destinos: hoy en adelante).
+   - Dos modos: (a) MOVER BLOQUE: ese dia y los siguientes de la semana se corren
+     k dias (k = 1; el dia mover puede empujar a la semana siguiente); (b) MOVER
+     SOLO ESTE ENTRENAMIENTO: elegir otro dia (con rutina o libre) y, opcional,
+     nueva hora; mismo dia + otra hora = "mover entrenamiento".
+   - Cliente: crea SOLICITUD pendiente que el entrenador aprueba o rechaza. Si
+     rechaza o no responde y el dia termina sin entrenar, queda como no
+     entrenado y nada cambia. Entrenador: aplica directo y notifica al cliente.
+   - Aprobado: el dia original queda sin rutina pero conserva en el detalle que
+     fue aplazado; la rutina aparece en el nuevo dia ("Movido desde el X").
+   - Aplica solo al periodo actual del plan: al renovar vuelve al horario base.
+   - Cancelar: sin aprobacion; el dia queda como no entrenado con comentario
+     "cancelado por X, fecha, motivo" visible en el detalle.
+   - Trazabilidad: historial desplegable y paginado de aplazamientos y
+     cancelaciones (quien, cuando, motivo, resolucion).
+   - Calendario: entrenado verde, no entrenado rojo, aplazado borde naranja
+     (solicitado = borde naranja punteado), programado punteado, hoy borde blanco.
+   - Pendiente por decidir: limite del bloque a la misma semana; dias hacia
+     atras; si la cancelacion del cliente tambien requiere aprobacion.
+
+   9. PROGRESO Y VALORACIONES
+   - Valoracion = peso (obligatorio) + % grasa, cuello, hombros, pecho, cintura,
+     abdomen, cadera, brazo, muslo, pantorrilla (opcionales) (lista MET). Estatura
+     se captura al crear el cliente (aun no se muestra). La valoracion inicial se
+     toma al crear el cliente.
+   - Grafica de linea por medida (selector de medida) + ultima valoracion en
+     etiquetas + historial desplegable y paginado. Lo registran cliente o
+     entrenador y el otro recibe notificacion.
+   - Grafica de barras por ejercicio: barra de peso y de repeticiones juntas por
+     dia de entrenamiento; selector de ejercicio (radios, a la derecha) y de
+     periodo (30 dias, 3 meses, 6 meses, 1 ano); scroll horizontal. Cada barra se
+     normaliza a su propio maximo. Ejercicios por tiempo muestran solo segundos.
+   - Pendiente: lista de medidas configurable por entrenador; mejorar el modulo.
+
+   10. NUTRICION
+   - Por cliente: metas diarias (kcal, proteina, carbos, grasas), comidas con
+     hora, alimentos con cantidad libre, recomendaciones, plantillas. El cliente
+     solo lee. Guardado automatico. Aviso: metas orientativas que no sustituyen la
+     asesoria de un profesional de la salud. Sin base de alimentos ni calculo de
+     macros (fuera de alcance v1).
+
+   11. PAGOS
+   - Entrenador registra pagos del servicio (monto, fecha, vencimiento);
+     estados: Al dia / Vence pronto / Vencido / Sin pago. Filtro rapido de pago
+     pendiente. Cliente ve solo aviso de vencimiento. Registro manual en v1.
+
+   12. NOTIFICACIONES (notify, campana en el encabezado)
+   - Por rol, con contador y lista; cada una redirige al detalle (cid/tab/day).
+   - Eventos: rutina asignada o actualizada; horario asignado o cambiado;
+     entrenamiento registrado (la otra parte); valoracion registrada (la otra
+     parte); pago realizado; vencimiento de plan / pago vencido; solicitud de
+     aplazamiento (a entrenador); aprobacion / rechazo / aplazamiento directo /
+     cancelacion (a la otra parte); comentario del cliente en un dia; cliente
+     reasignado (cliente, nuevo entrenador, superadmin).
+   - Pendientes: notificar cambios de nutricion; email/push.
+
+   13. NAVEGACION Y UX
+   - Superadmin: Panel con secciones clickeables (clientes con selector Sin
+     registrar / Mas recientes / Mas antiguos, entrenadores, atencion, biblioteca),
+     migas de pan clickeables, logo vuelve al inicio, lista de clientes en tabla
+     con busqueda, filtros por entrenador y pago, orden por columna y paginacion.
+   - Entrenador: Agenda -> Mis clientes (con columna Horario) -> detalle con
+     pestañas Resumen (incluye calendario del mes e historial), Rutina (solo
+     semanas), Progreso, Nutricion, Pagos, Perfil.
+   - Cliente: movil primero; Rutina (semana / mes), Progreso, Nutricion.
+   - Accesibilidad: etiquetas en botones de icono, foco visible, filas clickeables
+     con teclado, colores no son el unico indicador, modo oscuro automatico.
+
+   14. MODELO DE DATOS SUGERIDO
+   Usuario(rol) | Entrenador(limite, estado) | Cliente | Vinculo(cliente,
+   entrenador, inicio, fin) | Ejercicio(grupo, equipo, tipo medida, creador) |
+   Rutina -> DiaRutina(dia semana, hora inicio/fin) -> EjercicioRutina(series, reps,
+   descanso, nota) | Entrenamiento(fecha, dia, marcado por/cuando) |
+   SerieRegistrada(kg, reps, por, cuando; inmutable) | Aplazamiento(modo, desde,
+   hasta, k, hora, motivo, estado, solicitado por, resuelto por) | Cancelacion |
+   Valoracion(medidas) | PlanNutricional | Pago | Notificacion | Plantilla.
+
+   15. DECISIONES ABIERTAS
+   Reglas de renovacion de plan; limite del bloque de aplazamiento; aprobacion de
+   cancelaciones; equipo como parte de la identidad del ejercicio; medidas
+   configurables; datos de emergencia; recuperacion de contrasena; que ve el
+   cliente de pagos; politica de datos de salud (consentimiento ya incluido).
+   ============================================================================ */
+
+
+const $=s=>document.querySelector(s),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mkR=()=>[{n:'Día 1 · Pecho y tríceps',ex:[{n:'Press de banca',s:4,r:10,rest:90,t:'reps',note:'Control en la bajada'},{n:'Press inclinado con mancuernas',s:4,r:10,rest:90,t:'reps',note:''},{n:'Fondos en paralelas',s:3,r:12,rest:75,t:'reps',note:''}]},
+{n:'Día 2 · Espalda y bíceps',ex:[{n:'Dominadas asistidas',s:4,r:8,rest:90,t:'reps',note:''},{n:'Remo con barra',s:4,r:10,rest:90,t:'reps',note:''}]},
+{n:'Día 3 · Pierna',ex:[{n:'Sentadilla',s:4,r:10,rest:120,t:'reps',note:''},{n:'Peso muerto rumano',s:4,r:10,rest:120,t:'reps',note:''}]},
+{n:'Día 4 · Hombro y core',ex:[{n:'Press militar',s:4,r:10,rest:90,t:'reps',note:''},{n:'Plancha',s:3,r:45,rest:60,t:'seg',note:'Tiempo en segundos'}]}].map(d=>({...d,comment:'',ex:d.ex.map(e=>({...e,last:e.t==='seg'?'':'35 kg × 10',logs:[]}))}));
+const mkC=(id,n,days,s,r,pay,due,done,lastRec)=>({id,n,days,s,r,pay,due,amount:180000,done,lastRec,routine:mkR(),weights:[{d:'05 oct',kg:68.4},{d:'19 oct',kg:67.9},{d:'02 nov',kg:67.2}],meas:{cintura:'74',cadera:'96',brazo:'30'},hist:[{d:'10 oct 2026',a:180000}],
+ notes:['Sin lesiones reportadas'],active:true});
+const D={trainers:[{id:1,n:'Carlos Ruiz',m:'carlos@ejemplo.com',c:12,on:true},{id:2,n:'Daniela Mora',m:'daniela@ejemplo.com',c:8,on:true},{id:3,n:'Felipe Santos',m:'felipe@ejemplo.com',c:15,on:true},{id:4,n:'Paula Niño',m:'paula@ejemplo.com',c:0,on:false}],
+clients:[mkC(1,'Laura Gómez',4,4,10,'ok','09 dic',3,'hoy'),mkC(2,'Andrés Pardo',3,3,12,'warn','17 nov',1,'hace 3 días'),mkC(3,'Marta Rueda',5,4,8,'ok','28 nov',5,'ayer'),mkC(4,'Julián Ortiz',4,4,12,'bad','02 nov',0,'hace 9 días'),mkC(5,'Sofía Vargas',3,3,15,'ok','12 dic',2,'hoy')],
+nut:{kcal:2200,p:160,c:240,g:60,meals:[['Desayuno','7:00',['Avena · 60 g','Huevos · 3 unidades','Banano · 1 unidad']],['Media mañana','10:00',['Yogur griego · 150 g','Almendras · 20 g']],['Almuerzo','13:00',['Pechuga de pollo · 180 g','Arroz · 150 g','Ensalada · libre']],['Merienda','16:30',['Batido de proteína · 1 porción','Fruta · 1 unidad']],['Cena','20:00',['Pescado · 150 g','Verduras al vapor · 200 g','Papa · 120 g']]],rec:'Beber al menos 2,5 litros de agua al día. Evitar ultraprocesados. Son metas orientativas y no sustituyen la asesoría de un profesional de la salud.'}};
+// pre-fill Laura day 1
+const L=D.clients[0].routine[0].ex;L[0].logs=[[40,10,'Laura','18:40'],[40,10,'Laura','18:44'],[42,9,'Laura','18:48'],[42,8,'Laura','18:52']];L[1].logs=[[16,10,'Carlos','19:02'],[16,10,'Carlos','19:06']];
+let S={role:null,cid:null,tab:'resumen',filter:'todos',menu:false,sess:null};
+const cur=()=>D.clients.find(c=>c.id===S.cid);
+const toast=t=>{$('#toast').innerHTML=`<div class="toast" role="status">${t}</div>`;setTimeout(()=>$('#toast').innerHTML='',1800)};
+const money=n=>'$'+n.toLocaleString('es-CO');
+const nav=(who,ini)=>`<div class="nav"><span class="logo" ${S.role==='sa'||S.role==='tr'?`role="link" tabindex="0" style="cursor:pointer" onclick="home()" onkeydown="if(event.key==='Enter')home()"`:''}>FORMA</span><span class="row"><span class="sm">${who}</span>${bellV()}<button class="av" onclick="S.menu=!S.menu;R()" aria-label="Menú de usuario">${ini}</button></span></div>${S.np?npV():''}${S.menu?`<div class="menu"><button onclick="toast('Cambiar contraseña (demo)')">Cambiar contraseña</button><button onclick="S.role=null;S.menu=false;R()">Cerrar sesión</button></div>`:''}`;
+const chip=p=>p==='none'?'<span class="chip">Sin pago</span>':p==='ok'?'<span class="chip ok">Al día</span>':p==='warn'?'<span class="chip warn">Vence pronto</span>':'<span class="chip bad">Vencido</span>';
+function setsDone(c){let t=0,d=0;c.routine.forEach(x=>x.ex.forEach(e=>{t+=e.s;d+=e.logs.filter(l=>l).length}));return[d,t]}
+function dayState(d){let t=0,n=0;d.ex.forEach(e=>{t+=e.s;n+=e.logs.filter(l=>l).length});return !d.done?'Pendiente':n>=t&&t>0?'Completado':'En progreso'}
+function R(){const a=$('#app');
+if(!S.role){a.innerHTML=loginV();return}
+if(S.role==='first'){a.innerHTML=firstV();return}
+if(S.role==='sa')a.innerHTML=nav('Superadmin · Tú','SA')+'<main>'+saMain()+'</main>';
+else if(S.role==='tr')a.innerHTML=nav('Entrenador: Carlos Ruiz','CR')+'<main>'+(S.lib?libV(false):S.ed?edV():S.cid?detailV():S.tl?listV():agendaV())+'</main>';
+else a.innerHTML=nav('Laura Gómez','LG')+'<main>'+clientV()+'</main>'}
+function loginV(){return `<div class="login"><div class="l"><div class="logo">FORMA</div><h1>Tu entrenamiento, en un solo lugar</h1><p style="opacity:.8">Rutinas, registros de series y plan nutricional, siempre al día entre tú y tu entrenador.</p></div>
+<div class="r"><h1 style="font-size:26px">Iniciar sesión</h1><p class="mut">Ingresa con el correo que te asignó tu entrenador.</p>
+<label for="em">Correo electrónico</label><input id="em" placeholder="correo@ejemplo.com"><label for="pw" style="margin-top:10px">Contraseña</label><input id="pw" type="password" placeholder="Tu contraseña">
+<div class="row sp sm" style="margin:12px 0"><label style="font-weight:400;margin:0"><input type="checkbox" style="width:auto"> Mantener sesión</label><a href="#" onclick="rec();return false" style="color:var(--acc)">¿Olvidaste tu contraseña?</a></div>
+<button class="btn p" onclick="toast('Usa un acceso de demostración')">Ingresar</button>
+<p class="sm mut" style="margin-top:18px">Acceso de demostración (elige un rol):</p><div class="demo"><button class="btn" onclick="go('sa')">Entrar como superadmin</button><button class="btn" onclick="go('tr')">Entrar como entrenador (Carlos)</button><button class="btn" onclick="go('cl')">Entrar como cliente (Laura)</button><button class="btn" onclick="go('first')">Primer ingreso de un cliente nuevo</button></div></div></div>`}
+function go(r){S={role:r,cid:null,tab:'resumen',filter:'todos',menu:false};R()}
+function modal(h){$('#modal').innerHTML=`<div class="modal" onclick="if(event.target===this)mc()"><div role="dialog">${h}</div></div>`}
+function mc(){$('#modal').innerHTML=''}
+function rec(){modal(`<h2>Recuperar contraseña</h2><p class="mut">Te enviaremos un enlace al correo.</p><label for="rm">Correo electrónico</label><input id="rm" type="email"><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="mc();toast('Enlace enviado')">Enviar enlace</button></div>`)}
+// SUPERADMIN
+function saV(){const on=D.trainers.filter(t=>t.on).length,tot=D.trainers.reduce((a,t)=>a+tc(t),0);
+return `${crumbs([['Inicio',"nv('dash')"],['Entrenadores']])}<div class="row sp"><div><h1>Entrenadores</h1><div class="mut">Administra las cuentas de los entrenadores de la plataforma</div></div><div class="row"><button class="btn" onclick="S.lib=1;S.lg='Pecho';S.lt='todos';S.lq='';R()">Biblioteca de ejercicios</button><button class="btn p" onclick="newTr()">+ Nuevo entrenador</button></div></div>
+<div style="height:14px"></div>
+<div class="card"><input placeholder="Buscar entrenador…" aria-label="Buscar entrenador" oninput="ft(this.value)" style="max-width:280px;margin-bottom:8px"><table class="tbl"><thead><tr><th>Entrenador</th><th class="hm">Correo</th><th>Clientes</th><th>Estado</th><th></th></tr></thead><tbody id="trb">${trRows(D.trainers)}</tbody></table></div>`}
+const trRows=l=>l.map(t=>`<tr class="click" tabindex="0" onclick="S.tv=${t.id};R()" onkeydown="if(event.key==='Enter'){S.tv=${t.id};R()}"><td><span class="ini">${t.n.split(' ').map(x=>x[0]).join('')}</span>${t.n}</td><td class="hm">${t.m}</td><td>${tc(t)}</td><td><span class="chip ${t.on?'ok':''}">${t.on?'Activo':'Suspendido'}</span></td><td style="text-align:right;color:var(--mut)">›</td></tr>`).join('');
+function ft(v){$('#trb').innerHTML=trRows(D.trainers.filter(t=>t.n.toLowerCase().includes(v.toLowerCase())))}
+function susp(id){const t=D.trainers.find(x=>x.id===id);modal(`<h2>¿Suspender a ${t.n}?</h2><p>${t.n} y sus <b>${tc(t)} clientes</b> perderán el acceso hasta que reactives la cuenta. Sus datos se conservan.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="D.trainers.find(x=>x.id===${id}).on=false;mc();R();toast('Entrenador suspendido')">Suspender</button></div>`)}
+function react(id){D.trainers.find(x=>x.id===id).on=true;R();toast('Entrenador reactivado')}
+function newTr(){modal(`<h2>Nuevo entrenador</h2><div class="grid"><div><label for="a1">Nombre</label><input id="a1"></div><div><label for="a2">Apellido</label><input id="a2"></div><div><label for="a3">Correo electrónico</label><input id="a3" type="email"></div><div><label for="a4">Límite de clientes</label><input id="a4" type="number" placeholder="Sin límite"></div></div><p class="sm mut">Recibirá un enlace de invitación para crear su propia contraseña.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="addTr()">Crear entrenador</button></div>`)}
+function addTr(){const n=($('#a1').value+' '+$('#a2').value).trim(),m=$('#a3').value.trim();if(!n||!m){toast('Completa nombre y correo');return}D.trainers.push({id:Date.now(),n,m,c:0,x:0,on:true,lim:+$('#a4').value||0});mc();R();toast('Invitación enviada a '+esc(m))}
+// TRAINER LIST
+function listV(){let l=mine();if(S.filter==='venc')l=l.filter(c=>c.pay!=='ok');if(S.filter==='inact')l=l.filter(c=>c.lastRec.startsWith('hace')&&parseInt(c.lastRec.match(/\d+/)||0)>=3);
+const q=S.q||'';l=l.filter(c=>c.n.toLowerCase().includes(q.toLowerCase()));
+return `${crumbs([['Agenda',"S.tl=0;R()"],['Mis clientes']])}<div class="row sp"><div><h1>Mis clientes</h1><div class="mut">${mine().length} clientes activos</div></div><div class="row"><input placeholder="Buscar cliente…" value="${esc(q)}" oninput="S.q=this.value;R();$('#app input').focus()" style="width:200px" aria-label="Buscar cliente"><button class="btn" onclick="S.lib=1;S.lg='Pecho';S.lt='todos';S.lq='';R()">Biblioteca de ejercicios</button><button class="btn p" onclick="newCl()">+ Nuevo cliente</button></div></div>
+<div class="row" style="margin:14px 0">${[['todos','Todos'],['venc','Pago pendiente o vencido'],['inact','Sin registrar hace 3+ días']].map(f=>`<button class="btn s" style="${S.filter===f[0]?'background:var(--ink);color:var(--bg)':''}" onclick="S.filter='${f[0]}';R()">${f[1]}</button>`).join('')}</div>
+<div class="card" style="padding:4px 8px"><table class="tbl"><thead><tr><th>Cliente</th><th class="hm">Plan</th><th>Esta semana</th><th class="hm">Último registro</th><th>Pago</th><th class="hm">Horario</th></tr></thead><tbody>${l.map(c=>`<tr class="click" onclick="S.cid=${c.id};S.tab='resumen';R()" tabindex="0"><td><span class="ini">${c.n.split(' ').map(x=>x[0]).join('')}</span>${c.n}</td><td class="hm">${c.days} días · ${c.s} series × ${c.r} reps</td><td><span class="dots">${Array.from({length:c.days},(_,i)=>`<span class="${i<c.done?'on':''}"></span>`).join('')}</span> <span class="sm">${c.done} de ${c.days}</span></td><td class="hm">${c.lastRec}</td><td>${chip(c.pay)}</td><td class="hm">${schTxt(c)}</td></tr>`).join('')||'<tr><td colspan="5" class="mut">Ningún cliente coincide con el filtro.</td></tr>'}</tbody></table></div>`}
+function newCl(){modal(`<h2>Nuevo cliente</h2><div class="grid"><div><label for="n1">Nombre</label><input id="n1"></div><div><label for="n2">Apellido</label><input id="n2"></div><div><label for="n3">Correo electrónico</label><input id="n3" type="email"></div><div><label for="n4">Fecha de nacimiento</label><input id="n4" type="date"></div><div style="grid-column:1/-1;margin-top:6px"><b>Valoración inicial</b><div class="sm mut">El peso es obligatorio. Las demás medidas son opcionales y se pueden completar después.</div></div><div><label for="n6">Estatura (cm)</label><input id="n6" type="number"></div>${MET.map(m=>`<div><label for="i_${m[0]}">${m[1]} (${m[2]})${m[0]==='kg'?' *':''}</label><input id="i_${m[0]}" type="number" step=".1"></div>`).join('')}<div><label for="n8">Días por semana</label><select id="n8"><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option></select></div><div><label for="n9">Monto mensual (COP)</label><input id="n9" type="number" value="180000"></div></div><label for="nn" style="margin-top:10px">Lesiones o notas</label><textarea id="nn" rows="2"></textarea><p class="sm mut">El cliente recibe un enlace para crear su contraseña.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="addCl()">Crear cliente</button></div>`)}
+function addCl(){const n=($('#n1').value+' '+$('#n2').value).trim();if(!n||!$('#n3').value){toast('Completa nombre y correo');return}if(!$('#i_kg').value){toast('Escribe el peso inicial');return}const d=+$('#n8').value,c=mkC(Date.now(),n,d,4,10,'warn','—',0,'sin registros');c.height=$('#n6').value;c.meas={cintura:'—',cadera:'—',brazo:'—'};const r={d:'14 nov',by:'Carlos'};MET.forEach(m=>{const v=$('#i_'+m[0]).value;if(v!=='')r[m[0]]=+v});c.weights=[r];['cintura','cadera','brazo'].forEach(k=>{if(r[k]!==undefined)c.meas[k]=r[k]});c.hist=[];c.notes=[$('#nn').value||'Sin notas'];c.routine=mkR().slice(0,Math.min(d,4));c.tid=1;c.start='2026-11-14';D.clients.push(c);mc();R();toast('Cliente creado e invitación enviada')}
+// TRAINER DETAIL
+function detailV(){const c=cur(),tabs=[['resumen','Resumen'],['rutina','Rutina'],['progreso','Progreso'],['nutricion','Nutrición'],['pagos','Pagos'],['perfil','Perfil']];
+return `${crumbs([['Agenda',"S.cid=null;S.tl=0;R()"],['Mis clientes',"S.cid=null;S.tl=1;R()"],[c.n]])}<div class="row sp"><div><h1>${c.n}</h1><div class="mut">${c.days} días / semana · ${c.s} series por ejercicio</div></div><span class="row"><button class="btn" onclick="openEd()">Editar rutina</button></span></div>
+<div class="tabs" role="tablist">${tabs.map(t=>`<button class="tab ${S.tab===t[0]?'on':''}" role="tab" onclick="S.tab='${t[0]}';R()">${t[1]}</button>`).join('')}</div>${({resumen:c=>resumenV(c)+calV(c)+ppHist(c),rutina:()=>rutinaVweek(true),progreso:progV,nutricion:()=>nutV(true),pagos:pagosV,perfil:perfilV})[S.tab](c)}`}
+function resumenV(c){const[d,t]=setsDone(c),w=c.weights;return `<div class="grid"><div class="card"><div class="mut sm">Adherencia semanal</div><div style="font-size:26px;font-weight:700">${c.done} de ${c.days} días</div><div class="bar"><i style="width:${c.done/c.days*100}%"></i></div></div><div class="card"><div class="mut sm">Último peso</div><div style="font-size:26px;font-weight:700">${w.length?w[w.length-1].kg+' kg':'—'}</div><div class="sm mut">${w.length>1?'Desde el inicio: '+(w[w.length-1].kg-w[0].kg).toFixed(1)+' kg':''}</div></div><div class="card"><div class="mut sm">Pago</div><div>${chip(c.pay)}</div><div class="sm mut" style="margin-top:6px">Vence ${c.due}</div></div></div>
+<div class="card"><h2>Alertas y notas</h2>${c.pay!=='ok'?`<div class="banner">Pago ${c.pay==='bad'?'vencido':'por vencer'}: ${c.due}</div>`:''}${c.routine.map(d=>d.comment?`<p>💬 <b>${d.n.split('·')[0]}</b>: “${esc(d.comment)}”</p>`:'').join('')||'<p class="mut">Sin comentarios del cliente esta semana.</p>'}</div>`}
+// routine editor/logger (shared)
+function rutinaVcur(isTr){const c=cur();return `<div class="row sp" style="margin-bottom:10px"><div></div><span class="sm mut">Las series se guardan solas · registra el cliente o el entrenador</span></div>${c.routine.map((d,di)=>`<details class="card day" ${di===0?'open':''}><summary><span>${d.n}${c.sch&&hasSch(d)?` <span class="sm mut" style="font-weight:400">· ${WD[d.wd]} ${d.time}${d.end?'–'+d.end:''}</span>`:''}</span><span class="chip ${dayState(d)==='Completado'?'ok':dayState(d)==='En progreso'?'warn':''}">${dayState(d)}</span></summary>${ppBtn(d)}${d.done?`<div class="sm mut" style="margin-top:8px">Entrenamiento marcado por ${d.done.by} · ${d.done.at}</div>`+d.ex.map((e,ei)=>exV(e,di,ei,isTr)).join(''):isToday(c,d)?gateV(d,di,isTr):viewNote(c,d,isTr)}${realV(d,di,isTr)}<label style="margin-top:10px" for="cm${di}">Comentario del día</label><textarea id="cm${di}" rows="2" placeholder="Ej. me molestó el hombro" onchange="cur().routine[${di}].comment=this.value;if(S.role==='cl')notify('tr','Laura dejó un comentario en '+cur().routine[${di}].n,cur().id,'resumen');toast('Comentario guardado')">${esc(d.comment)}</textarea></details>`).join('')}`}
+// progress
+// nutrition
+// payments
+function pagosV(c){return `<div class="card"><div class="row sp"><div><h2>Plan de servicio</h2><div>${money(c.amount)} / mes · vence ${c.due}</div></div><div class="row">${chip(c.pay)}<button class="btn p" onclick="pay()">Registrar pago</button></div></div></div><div class="card"><h2>Historial</h2>${c.hist.map(h=>`<div class="row sp" style="padding:7px 0;border-top:1px solid var(--line)"><span>${h.d}</span><b>${money(h.a)}</b></div>`).join('')||'<p class="mut">Aún no hay pagos registrados.</p>'}</div>`}
+function pay(){const c=cur();c.hist.unshift({d:'14 nov 2026',a:c.amount});notify('cl','Pago registrado: '+money(c.amount),c.id,'rutina');c.pay='ok';c.due='14 dic';R();toast('Pago registrado')}
+function perfilV(c){return `<div class="card"><h2>Perfil</h2><p>Notas: ${c.notes.map(esc).join('. ')}</p><div class="row"><button class="btn" onclick="toast('Reenviar invitación (demo)')">Reenviar invitación</button><button class="btn" onclick="c=cur();c.active=false;S.cid=null;R();toast('Cliente archivado')">Archivar cliente</button></div></div>`}
+// SEMANAS, REASIGNACIÓN, ARRASTRE
+const TODAY=new Date('2026-11-14T12:00:00'),WK=['routine','weights','meas','hist','notes','start','done','lastRec','pay','due','amount','days','s','r','nut'];
+const wk=(c,s)=>{const n=Math.floor((TODAY-new Date(c.start))/6048e5)+1;return s?'Semana '+n:'Semana '+n+' de entrenamiento · 9 – 15 nov 2026'};
+const mine=()=>D.clients.filter(c=>c.active&&c.tid===1);
+const tc=t=>t.x+D.clients.filter(c=>c.tid===t.id&&c.active).length;
+let dg=null;
+['2026-10-05','2026-09-14','2026-08-03','2026-10-26','2026-11-02'].forEach((s,i)=>{D.clients[i].start=s;D.clients[i].tid=1});
+[['Camilo Díaz',2],['Valentina Ríos',2],['Esteban Cruz',3]].forEach((x,i)=>{const c=mkC(10+i,x[0],3,3,12,'ok','20 dic',1,'ayer');c.start='2026-10-12';c.tid=x[1];D.clients.push(c)});
+D.trainers.forEach(t=>t.x={1:7,2:6,3:14,4:0}[t.id]);
+function dp(i){const x=ED().ex;if(dg==null||dg===i)return;const[m]=x.splice(dg,1);x.splice(i,0,m);dg=null;R()}
+// DETALLE DE ENTRENADOR
+function trV(){const t=D.trainers.find(x=>x.id===S.tv),cl=D.clients.filter(c=>c.tid===t.id&&c.active),full=t.lim&&tc(t)>=t.lim,late=cl.filter(c=>c.pay!=='ok').length;
+return `${crumbs([['Inicio',"nv('dash')"],['Entrenadores',"nv('trs')"],[t.n]])}
+<div class="card row sp" style="margin-top:12px;padding:20px"><div class="row" style="gap:16px"><span class="ini" style="width:64px;height:64px;font-size:22px;margin:0">${t.n.split(' ').map(x=>x[0]).join('')}</span><div><h1 style="margin:0">${t.n}</h1><div class="mut">${t.m}${t.ph?' · '+esc(t.ph):''}</div><div style="margin-top:6px"><span class="chip ${t.on?'ok':''}">${t.on?'Activo':'Suspendido'}</span>${t.sp?` <span class="chip">${esc(t.sp)}</span>`:''}</div></div></div><div class="row"><button class="btn" onclick="editTr(${t.id})">Editar datos</button>${t.on?`<button class="btn" onclick="susp(${t.id})">Suspender</button>`:`<button class="btn p" onclick="react(${t.id})">Reactivar</button>`}</div></div>
+${t.on?'':'<div class="banner">Cuenta suspendida: ni el entrenador ni sus clientes pueden ingresar. Reactiva la cuenta para asignarle clientes.</div>'}
+<div class="grid" style="margin-bottom:12px">${[['Clientes',tc(t)],['Límite de clientes',t.lim||'Sin límite'],['Pagos pendientes',late]].map(x=>`<div class="card" style="margin:0"><div class="mut sm">${x[0]}</div><div style="font-size:28px;font-weight:700">${x[1]}</div></div>`).join('')}</div>
+<div class="card"><div class="row sp"><div><h2 style="margin:0">Clientes</h2><div class="sm mut">Toca un cliente para ver su detalle o cambiarlo de entrenador</div></div>${t.on?`<button class="btn p" ${full?'disabled':''} onclick="assignCl(${t.id})">+ Asignar cliente</button>`:''}</div>${full&&t.on?'<div class="sm mut" style="margin-top:6px">Alcanzó su límite de clientes.</div>':''}
+${cl.map(c=>`<div class="row sp rowc" tabindex="0" role="button" onclick="S.cv=${c.id};S.from='trs';R()" onkeydown="if(event.key==='Enter'){S.cv=${c.id};S.from='trs';R()}" style="padding:12px 8px;border-top:1px solid var(--line);margin-top:10px;cursor:pointer"><div class="row"><span class="ini" style="margin:0">${c.n.split(' ').map(x=>x[0]).join('')}</span><div><b>${c.n}</b><div class="sm mut">${wk(c,1)} de entrenamiento · último registro ${c.lastRec}</div></div></div><div class="row">${chip(c.pay)}<span class="mut" aria-hidden="true">›</span></div></div>`).join('')||`<p class="mut" style="margin-top:10px">Este entrenador aún no tiene clientes.${t.on?' Asigna uno con “+ Asignar cliente”.':''}</p>`}${t.x?`<p class="sm mut">Y ${t.x} clientes más que no están cargados en el prototipo.</p>`:''}</div>`}
+function assignCl(tid){const t=D.trainers.find(x=>x.id===tid),f=t.n.split(' ')[0],o=D.clients.filter(c=>c.tid!==tid&&c.active);
+modal(`<h2>Asignar cliente a ${t.n}</h2><p class="sm mut">Si el cliente ya estuvo con ${f}, recupera su historial; si no, empieza un registro nuevo.</p>${o.map(c=>`<div class="row sp" style="padding:10px 0;border-top:1px solid var(--line)"><div><b>${c.n}</b><div class="sm mut">Con ${D.trainers.find(x=>x.id===c.tid).n}${c.snap&&c.snap[tid]?' · tiene historial con '+f:''}</div></div><button class="btn s" onclick="askRe(${c.id},${tid})">Asignar</button></div>`).join('')||'<p class="mut">No hay otros clientes para asignar.</p>'}<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="mc()">Cerrar</button></div>`)}
+function editTr(id){const t=D.trainers.find(x=>x.id===id);
+modal(`<h2>Editar entrenador</h2><div class="grid"><div><label for="e1">Nombre completo</label><input id="e1" value="${esc(t.n)}"></div><div><label for="e2">Correo electrónico</label><input id="e2" type="email" value="${esc(t.m)}"></div><div><label for="e3">Teléfono</label><input id="e3" value="${esc(t.ph||'')}"></div><div><label for="e4">Especialidad</label><input id="e4" placeholder="Ej. Fuerza, hipertrofia…" value="${esc(t.sp||'')}"></div><div><label for="e5">Límite de clientes</label><input id="e5" type="number" min="0" placeholder="Sin límite" value="${t.lim||''}"></div></div><p class="sm mut">Cambiar el correo cambia su usuario de acceso.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="saveTr(${id})">Guardar cambios</button></div>`)}
+function saveTr(id){const t=D.trainers.find(x=>x.id===id),n=$('#e1').value.trim(),m=$('#e2').value.trim(),l=+$('#e5').value||0;if(!n||!m){toast('Completa nombre y correo');return}if(l&&l<tc(t)){toast('El límite es menor que sus '+tc(t)+' clientes actuales');return}Object.assign(t,{n,m,ph:$('#e3').value.trim(),sp:$('#e4').value.trim(),lim:l});mc();R();toast('Cambios guardados')}
+// CAMBIO DE ENTRENADOR
+const wkAt=s=>Math.floor((new Date(s.left||'2026-11-14')-new Date(s.start))/6048e5)+1;
+function clientModal(cid){const c=D.clients.find(x=>x.id===cid),d=D.trainers.filter(x=>x.on&&x.id!==c.tid&&!(x.lim&&tc(x)>=x.lim)),o=D.trainers.find(x=>x.id===c.tid).n;
+modal(`<div class="row" style="gap:12px"><span class="ini" style="width:48px;height:48px;margin:0">${c.n.split(' ').map(x=>x[0]).join('')}</span><div><h2 style="margin:0">${c.n}</h2><div class="sm mut">Con ${o} · ${wk(c,1)} de entrenamiento</div></div></div><div class="row" style="margin:12px 0">${chip(c.pay)}<span class="sm mut">Último registro: ${c.lastRec}</span></div>
+<h2 style="margin-top:16px">Cambiar de entrenador</h2>${d.length?d.map((x,i)=>`<label class="card" style="display:flex;gap:10px;align-items:center;font-weight:400;cursor:pointer;margin-bottom:8px;padding:12px"><input type="radio" name="dst" value="${x.id}" ${i?'':'checked'} style="width:auto"><span><b>${x.n}</b><span class="sm mut" style="display:block">${tc(x)} clientes${c.snap&&c.snap[x.id]?' · ya estuvo con este entrenador':''}</span></span></label>`).join(''):'<p class="mut">No hay entrenadores activos con cupo disponible.</p>'}
+<div class="row" style="justify-content:flex-end;margin-top:8px"><button class="btn" onclick="mc()">Cerrar</button>${d.length?`<button class="btn p" onclick="askRe(${c.id},+document.querySelector('input[name=dst]:checked').value)">Continuar</button>`:''}</div>`)}
+function askRe(cid,tid){const c=D.clients.find(x=>x.id===cid),n=D.trainers.find(x=>x.id===tid);if(!c||!n)return;if(n.lim&&tc(n)>=n.lim){toast('Este entrenador alcanzó su límite de clientes');return}
+const o=D.trainers.find(x=>x.id===c.tid).n,s=c.snap&&c.snap[tid],f=n.n.split(' ')[0],opt=(v,t,d,ck)=>`<label class="card" style="display:flex;gap:10px;font-weight:400;cursor:pointer;padding:12px;margin-bottom:8px"><input type="radio" name="md" value="${v}" ${ck?'checked':''} style="width:auto"><span><b>${t}</b><span class="sm mut" style="display:block">${d}</span></span></label>`;
+modal(`<h2>¿Pasar a ${c.n} con ${n.n}?</h2>${s?`<p>${c.n} ya entrenó con ${f}: se fue en la semana ${wkAt(s)}. ¿Cómo quieres contar su tiempo?</p>${opt('r','Retomar lo anterior','Recupera su rutina, progreso y pagos. Su conteo sigue desde la semana '+wkAt(s)+'.',1)}${opt('n','Empezar de nuevo','Registro nuevo sin rutina ni progreso, desde la semana 1. El historial anterior se archiva.',0)}`:`<p>Empezará un <b>registro nuevo</b> con ${n.n}: sin rutina, progreso ni pagos previos, desde la semana 1.</p>`}<p class="sm mut">Lo que tiene con ${o} queda guardado por si regresa.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="doRe(${cid},${tid},(document.querySelector('input[name=md]:checked')||{}).value)">Confirmar cambio</button></div>`)}
+// REGLA: reasignar = registro nuevo (semana 1) o retomar el historial si ya estuvo con ese entrenador.
+function doRe(cid,tid,md){const c=D.clients.find(x=>x.id===cid);if(c.tid===tid){mc();return}c.snap=c.snap||{};c.snap[c.tid]=Object.assign(Object.fromEntries(WK.map(k=>[k,c[k]])),{left:'2026-11-14'});
+const s=c.snap[tid],back=s&&md!=='n';let w=1;
+if(back){Object.assign(c,s);delete c.left;c.start=new Date(TODAY-(new Date(s.left)-new Date(s.start))).toISOString().slice(0,10);w=wkAt(s)}
+else{if(s){c.arch=c.arch||[];c.arch.push(s);delete c.snap[tid]}delete c.nut;Object.assign(c,{routine:[{n:'Día 1',comment:'',ex:[]}],weights:[],meas:{cintura:'—',cadera:'—',brazo:'—'},hist:[],notes:['Sin notas'],start:'2026-11-14',done:0,lastRec:'sin registros',pay:'none',due:'—',days:3,s:3,r:10})}
+c.tid=tid;notify('cl','Ahora entrenas con '+D.trainers.find(x=>x.id===tid).n,c.id,'rutina');notify('sa',c.n+' fue reasignado a '+D.trainers.find(x=>x.id===tid).n,c.id);if(tid===1)notify('tr',c.n+' fue asignado a ti',c.id,'resumen');mc();R();toast(back?'Historial retomado · semana '+w:'Nuevo registro · semana 1')}
+// DETALLE DE CLIENTE (SUPERADMIN)
+function clV(){const c=D.clients.find(x=>x.id===S.cv),t=D.trainers.find(x=>x.id===c.tid),w=c.weights,dt=s=>new Date(s).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}),
+prev=Object.keys(c.snap||{}).filter(k=>+k!==c.tid).map(k=>({t:D.trainers.find(x=>x.id===+k),s:c.snap[k]})),row=(a,b)=>`<div class="row sp" style="padding:7px 0;border-top:1px solid var(--line)"><span>${a}</span><b>${b}</b></div>`;
+return `${crumbs(S.from==='cls'?[['Inicio',"nv('dash')"],['Clientes',"nv('cls')"],[c.n]]:S.from==='dash'?[['Inicio',"nv('dash')"],[c.n]]:[['Inicio',"nv('dash')"],['Entrenadores',"nv('trs')"],[t.n,`nv('trs',${t.id})`],[c.n]])}
+<div class="card row sp" style="margin-top:12px;padding:20px"><div class="row" style="gap:16px"><span class="ini" style="width:64px;height:64px;font-size:22px;margin:0">${c.n.split(' ').map(x=>x[0]).join('')}</span><div><h1 style="margin:0">${c.n}</h1><div class="mut">Entrenador: ${t.n} · desde ${dt(c.start)}</div><div style="margin-top:6px">${chip(c.pay)} <span class="chip">${wk(c,1)} de entrenamiento</span></div></div></div><button class="btn" onclick="clientModal(${c.id})">Cambiar de entrenador</button></div>
+<div class="grid" style="margin-bottom:12px">${[['Semana de entrenamiento',wk(c,1).replace('Semana ','')],['Adherencia semanal',c.done+' de '+c.days+' días'],['Último peso',w.length?w[w.length-1].kg+' kg':'—'],['Último registro',c.lastRec]].map(x=>`<div class="card" style="margin:0"><div class="mut sm">${x[0]}</div><div style="font-size:24px;font-weight:700">${x[1]}</div></div>`).join('')}</div>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start">
+<div class="card"><h2>Plan de entrenamiento</h2><div class="sm mut" style="margin-bottom:6px">${c.days} días / semana · ${c.s} series × ${c.r} reps por defecto</div>${c.routine.map(d=>row(d.n,`<span class="sm mut" style="font-weight:400">${d.ex.length} ejercicios · ${dayState(d)}</span>`)).join('')}${c.routine.every(d=>!d.ex.length)?'<p class="mut">Aún sin ejercicios asignados.</p>':''}</div>
+<div class="card"><h2>Progreso</h2>${w.length?w.map(x=>row(x.d,x.kg+' kg')).join(''):'<p class="mut">Sin registros de peso.</p>'}${row('Cintura',c.meas.cintura+' cm')}${row('Cadera',c.meas.cadera+' cm')}${row('Brazo',c.meas.brazo+' cm')}</div>
+<div class="card"><h2>Pagos</h2>${row('Estado',chip(c.pay))}${row('Próximo vencimiento',c.due)}${row('Valor mensual',money(c.amount))}${c.hist.slice(0,3).map(h=>row('Pago del '+h.d,money(h.a))).join('')}</div>
+<div class="card"><h2>Notas</h2><p>${c.notes.map(esc).join('. ')}</p><h2 style="margin-top:14px">Entrenadores anteriores</h2>${prev.map(p=>row(p.t.n,`<span class="sm mut" style="font-weight:400">se fue en la semana ${wkAt(p.s)}</span>`)).join('')||'<p class="mut">Nunca ha cambiado de entrenador.</p>'}${c.arch&&c.arch.length?`<p class="sm mut">${c.arch.length} registro(s) archivado(s).</p>`:''}</div></div>
+<p class="sm mut" style="margin-top:12px">Vista informativa: solo el entrenador edita rutina, progreso y pagos.</p>`}
+// PANEL, CLIENTES Y NAVEGACIÓN (SUPERADMIN)
+const crumbs=a=>`<nav class="crumbs" aria-label="Ruta de navegación">${a.map((x,i)=>i===a.length-1?`<b aria-current="page">${x[0]}</b>`:`<a href="#" onclick="${x[1]};return false">${x[0]}</a><span aria-hidden="true">›</span>`).join('')}</nav>`;
+function nv(sv,tv,cv,from){S.sv=sv;S.tv=tv||0;S.cv=cv||0;S.from=from||sv;S.lib=0;R();scrollTo(0,0)}
+function goLib(){S.sv='lib';S.tv=0;S.cv=0;S.lib=1;S.lg='Pecho';S.lt='todos';S.lq='';R()}
+const why=c=>{const r=[],m=/hace (\d+)/.exec(c.lastRec);if(c.pay==='bad')r.push(['Pago vencido','bad']);else if(c.pay==='warn')r.push(['Pago por vencer','warn']);else if(c.pay==='none')r.push(['Sin pago registrado','warn']);if(m&&+m[1]>=3)r.push(['Sin registrar '+c.lastRec,'warn']);return r};
+function saMain(){const act=S.lib?'lib':S.cv?(S.from==='cls'?'cls':S.from==='dash'?'dash':'trs'):S.tv?'trs':(S.sv==='trs'||S.sv==='cls'?S.sv:'dash');
+const tabs=`<div class="tabs" role="tablist">${[['dash','Panel',"nv('dash')"],['trs','Entrenadores',"nv('trs')"],['cls','Clientes',"nv('cls')"],['lib','Biblioteca','goLib()']].map(t=>`<button class="tab ${act===t[0]?'on':''}" role="tab" onclick="${t[2]}">${t[1]}</button>`).join('')}</div>`;
+return (S.lib?libV(true):S.cv?clV():S.tv?trV():act==='trs'?saV():act==='cls'?clsV():dashV())}
+// PANEL CON SECCIONES
+const dsr=c=>c.lastRec==='hoy'?0:c.lastRec==='ayer'?1:+((/hace (\d+)/.exec(c.lastRec)||[0,99])[1]);
+const PV=[['sin','Sin registrar'],['rec','Más recientes'],['ant','Más antiguos']];
+const clk=js=>`tabindex="0" role="button" onclick="${js}" onkeydown="if(event.key==='Enter'){${js}}"`;
+function dashV(){const tr=D.trainers,on=tr.filter(t=>t.on).length,tot=tr.reduce((a,t)=>a+tc(t),0),cs=D.clients.filter(c=>c.active),pend=cs.filter(c=>c.pay!=='ok').length,adh=Math.round(cs.reduce((a,c)=>a+c.done/c.days,0)/cs.length*100),att=cs.map(c=>[c,why(c)]).filter(x=>x[1].length),m=S.pv||'sin',
+dt=s=>new Date(s).toLocaleDateString('es-CO',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}),
+pre=cs.slice().sort((a,b)=>m==='sin'?dsr(b)-dsr(a):m==='rec'?new Date(b.start)-new Date(a.start):new Date(a.start)-new Date(b.start)).slice(0,5),ini=c=>c.n.split(' ').map(x=>x[0]).join('');
+return `<div class="row sp"><div><h1>Panel</h1><div class="mut">Resumen de la plataforma · 14 nov 2026</div></div><button class="btn p" onclick="newTr()">+ Nuevo entrenador</button></div>
+<div class="grid" style="margin:16px 0 6px">${[['Entrenadores activos',on+' de '+tr.length,"nv('trs')"],['Clientes en total',tot,"nv('cls')"],['Pagos por atender',pend,''],['Adherencia semanal',adh+'%','']].map(x=>`<div class="card ${x[2]?'rowc':''}" ${x[2]?clk(x[2]):''} style="margin:0;${x[2]?'cursor:pointer':''}"><div class="mut sm">${x[0]}</div><div style="font-size:30px;font-weight:700">${x[1]}</div></div>`).join('')}</div>
+<p class="sm mut" style="margin:0 0 14px">Pagos y adherencia se calculan con los clientes cargados en el prototipo.</p>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(340px,1fr));align-items:start">
+<div class="card"><div class="row sp"><h2 style="margin:0"><a href="#" style="color:inherit" onclick="nv('cls');return false">Clientes ›</a></h2><a href="#" class="sm" style="color:var(--acc)" onclick="nv('cls');return false">Ir a todos</a></div><div class="row" style="margin:10px 0">${PV.map(p=>`<button class="btn s" style="${m===p[0]?'background:var(--ink);color:var(--bg)':''}" onclick="S.pv='${p[0]}';R()">${p[1]}</button>`).join('')}</div>${pre.map(c=>`<div class="row sp rowc" ${clk(`nv('dash',0,${c.id},'dash')`)} style="padding:10px 8px;border-top:1px solid var(--line);cursor:pointer"><div class="row"><span class="ini" style="margin:0">${ini(c)}</span><div><b>${c.n}</b><div class="sm mut">${D.trainers.find(x=>x.id===c.tid).n} · ${m==='sin'?'último registro '+c.lastRec:'desde '+dt(c.start)+' · '+wk(c,1).toLowerCase()}</div></div></div>${chip(c.pay)}</div>`).join('')}<div style="margin-top:10px"><a href="#" style="color:var(--acc)" onclick="nv('cls');return false">Ir a todos los clientes</a></div></div>
+<div class="card"><div class="row sp"><h2 style="margin:0"><a href="#" style="color:inherit" onclick="nv('trs');return false">Entrenadores ›</a></h2><a href="#" class="sm" style="color:var(--acc)" onclick="nv('trs');return false">Ver todos</a></div>${tr.map(t=>`<div class="row sp rowc" ${clk(`nv('trs',${t.id})`)} style="padding:10px 8px;border-top:1px solid var(--line);margin-top:8px;cursor:pointer"><div><b>${t.n}</b><div class="sm mut">${tc(t)}${t.lim?' de '+t.lim:''} clientes</div></div><span class="chip ${t.on?'ok':''}">${t.on?'Activo':'Suspendido'}</span></div>`).join('')}</div>
+<div class="card"><h2>Necesitan atención</h2>${att.map(([c,r])=>`<div class="row sp rowc" ${clk(`nv('dash',0,${c.id},'dash')`)} style="padding:10px 8px;border-top:1px solid var(--line);cursor:pointer"><div><b>${c.n}</b><div class="sm mut">Con ${D.trainers.find(x=>x.id===c.tid).n}</div></div><div class="row">${r.map(x=>`<span class="chip ${x[1]}">${x[0]}</span>`).join('')}</div></div>`).join('')||'<p class="mut">Todo al día. Ningún cliente requiere atención.</p>'}</div>
+<div class="card rowc" ${clk('goLib()')} style="cursor:pointer"><h2>Biblioteca de ejercicios ›</h2><div style="font-size:30px;font-weight:700">${D.lib.length}</div><div class="sm mut">ejercicios en ${D.groups.length} grupos musculares, visibles para todos</div></div></div>`}
+// NUTRICIÓN EDITABLE (POR CLIENTE)
+D.nut.meals=D.nut.meals.map(m=>({n:m[0],t:m[1],f:m[2].map(s=>{const p=s.split(' · ');return{a:p[0],q:p[1]}})}));
+const nutOf=c=>c.nut||(c.nut=c.id===1?JSON.parse(JSON.stringify(D.nut)):{kcal:'',p:'',c:'',g:'',meals:[],rec:''});
+const rr=()=>{const y=scrollY;R();scrollTo(0,y)};
+const nSet=(k,v)=>{nutOf(cur())[k]=v;toast('Guardado')};
+const nMeal=(i,k,v)=>{nutOf(cur()).meals[i][k]=v;toast('Guardado')};
+const nFood=(i,j,k,v)=>{nutOf(cur()).meals[i].f[j][k]=v;toast('Guardado')};
+const nAdd=i=>{nutOf(cur()).meals[i].f.push({a:'',q:''});rr()};
+const nDelFood=(i,j)=>{nutOf(cur()).meals[i].f.splice(j,1);rr()};
+const nDelMeal=i=>{nutOf(cur()).meals.splice(i,1);rr()};
+const nAddMeal=()=>{nutOf(cur()).meals.push({n:'Nueva comida',t:'12:00',f:[{a:'',q:''}]});rr()};
+function nutV(edit){const n=nutOf(cur()),meta=[['Calorías','kcal','kcal'],['Proteína','p','g'],['Carbohidratos','c','g'],['Grasas','g','g']];
+return `${edit?'<div class="row" style="justify-content:flex-end;margin-bottom:10px"><button class="btn" onclick="ntApply()">Aplicar plantilla</button><button class="btn" onclick="ntSave()">Guardar como plantilla</button></div>':''}<div class="grid">${meta.map(x=>`<div class="card" style="margin:0"><label ${edit?`for="m${x[1]}"`:''} class="mut sm" style="font-weight:400">${x[0]}</label>${edit?`<div class="row" style="flex-wrap:nowrap"><input id="m${x[1]}" type="number" value="${n[x[1]]}" onchange="nSet('${x[1]}',this.value)"><span class="sm mut">${x[2]}</span></div>`:`<div style="font-size:22px;font-weight:700">${n[x[1]]!==''?n[x[1]]+' '+x[2]:'—'}</div>`}</div>`).join('')}</div><div style="height:12px"></div>
+${n.meals.map((m,i)=>`<div class="card"><div class="row sp">${edit?`<input value="${esc(m.n)}" aria-label="Nombre de la comida" style="font-weight:600;max-width:240px" onchange="nMeal(${i},'n',this.value)"><span class="row"><input type="time" value="${m.t.length===4?'0'+m.t:m.t}" aria-label="Hora" style="width:auto" onchange="nMeal(${i},'t',this.value)"><button class="btn s" aria-label="Quitar comida" onclick="nDelMeal(${i})">✕</button></span>`:`<h2 style="margin:0">${esc(m.n)}</h2><span class="mut sm">${m.t}</span>`}</div>${m.f.map((f,j)=>edit?`<div class="row" style="margin-top:8px;flex-wrap:nowrap"><input class="grow" value="${esc(f.a)}" placeholder="Alimento" aria-label="Alimento" onchange="nFood(${i},${j},'a',this.value)"><input value="${esc(f.q)}" placeholder="Cantidad" aria-label="Cantidad" style="width:120px" onchange="nFood(${i},${j},'q',this.value)"><button class="btn s" aria-label="Quitar alimento" onclick="nDelFood(${i},${j})">✕</button></div>`:`<div class="row sp" style="padding:7px 0;border-top:1px solid var(--line)"><span>${esc(f.a)}</span><b>${esc(f.q)}</b></div>`).join('')}${edit?`<button class="btn s" style="margin-top:10px" onclick="nAdd(${i})">+ Agregar alimento</button>`:''}</div>`).join('')||`<div class="card mut">${edit?'Aún no hay comidas. Agrega la primera.':'Tu entrenador aún no ha cargado tu plan nutricional.'}</div>`}
+${edit?`<button class="btn" onclick="nAddMeal()">+ Agregar comida</button><div class="card" style="margin-top:12px"><label for="rec">Recomendaciones</label><textarea id="rec" rows="3" onchange="nSet('rec',this.value)">${esc(n.rec)}</textarea></div><p class="sm mut">Los cambios se guardan solos. Son metas orientativas y no sustituyen la asesoría de un profesional de la salud.</p>`:`${n.rec?`<div class="card" style="background:var(--soft)"><h2>Recomendaciones de tu entrenador</h2>${esc(n.rec)}</div>`:''}<p class="sm mut">Este plan es de solo lectura. Si necesitas un cambio, habla con tu entrenador.</p>`}`}
+// PLANTILLAS + LISTA DE CLIENTES ESCALABLE
+D.tpl={rut:[{id:1,n:'Hipertrofia 4 días',days:mkR().map(d=>({n:d.n,ex:d.ex.map(e=>({...e,logs:[],last:''}))}))}],nut:[{id:1,n:'Plan base 2200 kcal',...JSON.parse(JSON.stringify(D.nut))}]};
+const tplList=(kind,fn)=>D.tpl[kind].map(t=>`<div class="row sp" style="padding:10px 0;border-top:1px solid var(--line)"><div><b>${esc(t.n)}</b><div class="sm mut">${kind==='rut'?t.days.length+' días · '+t.days.reduce((a,d)=>a+d.ex.length,0)+' ejercicios':t.kcal+' kcal · '+t.meals.length+' comidas'}</div></div><span class="row"><button class="btn s" onclick="${fn}(${t.id})">Aplicar</button><button class="btn s" onclick="tplDel('${kind}',${t.id})">Eliminar</button></span></div>`).join('')||'<p class="mut">Aún no hay plantillas guardadas.</p>';
+const tplAsk=(kind,fn,ttl)=>modal(`<h2>${ttl}</h2><p class="sm mut">${kind==='rut'?'Reemplaza lo que hay ahora en el editor. No se guarda hasta que pulses “Guardar rutina”.':'Reemplaza el plan actual de este cliente.'}</p>${tplList(kind,fn)}<div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="mc()">Cerrar</button></div>`);
+const tplName=(ttl,fn)=>modal(`<h2>${ttl}</h2><label for="t1">Nombre de la plantilla</label><input id="t1"><div class="row" style="justify-content:flex-end;margin-top:14px"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="${fn}()">Guardar plantilla</button></div>`);
+const tplApply=()=>tplAsk('rut','tplUse','Aplicar plantilla de rutina'),tplSave=()=>tplName('Guardar rutina como plantilla','tplDoSave'),ntApply=()=>tplAsk('nut','ntUse','Aplicar plantilla nutricional'),ntSave=()=>tplName('Guardar plan como plantilla','ntDoSave');
+function tplDoSave(){const n=$('#t1').value.trim();if(!n){toast('Escribe un nombre');return}D.tpl.rut.push({id:Date.now(),n,days:S.ed.r.map(d=>({n:d.n,ex:d.ex.map(e=>({...e,logs:[],last:''}))}))});mc();toast('Plantilla guardada')}
+function tplUse(id){const t=D.tpl.rut.find(x=>x.id===id);const o=S.ed.r;S.ed.r=JSON.parse(JSON.stringify(t.days)).map((d,i)=>({...d,wd:(o[i]||{}).wd,time:(o[i]||{}).time,end:(o[i]||{}).end,real:(o[i]||{}).real,comment:'',auto:false,g:[...new Set(d.ex.map(e=>(D.lib.find(x=>x.n===e.n)||{}).g).filter(Boolean))]}));S.ed.day=0;mc();R();toast('Plantilla aplicada · revisa y guarda la rutina')}
+function ntDoSave(){const n=$('#t1').value.trim();if(!n){toast('Escribe un nombre');return}D.tpl.nut.push({id:Date.now(),n,...JSON.parse(JSON.stringify(nutOf(cur())))});mc();toast('Plantilla guardada')}
+function ntUse(id){const c=JSON.parse(JSON.stringify(D.tpl.nut.find(x=>x.id===id)));delete c.id;delete c.n;cur().nut=c;mc();rr();toast('Plantilla aplicada')}
+const PS=6,acl=()=>{$('#acl').innerHTML=aclV()};
+function srt(k){if((S.so||'n')===k)S.sd=S.sd===-1?1:-1;else{S.so=k;S.sd=1}S.pg=1;acl()}
+// REGLA: lista de clientes del superadmin con filtros, orden y paginacion (sin scroll infinito).
+function aclV(){const tn=c=>D.trainers.find(x=>x.id===c.tid).n,k=S.so||'n',d=S.sd===-1?-1:1,key={n:c=>c.n,t:tn,w:c=>new Date(c.start),r:dsr,p:c=>({bad:0,warn:1,none:2,ok:3})[c.pay]},q=(S.q2||'').toLowerCase();
+const l=D.clients.filter(c=>c.active&&c.n.toLowerCase().includes(q)&&(!S.fe||c.tid===+S.fe)&&(!S.fp||(S.fp==='ok'?c.pay==='ok':c.pay!=='ok'))).sort((a,b)=>{const x=key[k](a),y=key[k](b);return(x>y?1:x<y?-1:0)*d});
+const pages=Math.max(1,Math.ceil(l.length/PS)),pg=Math.min(S.pg||1,pages),v=l.slice((pg-1)*PS,pg*PS),xx=D.trainers.reduce((a,t)=>a+t.x,0),filt=q||S.fe||S.fp,
+th=(key2,t,cl)=>`<th class="${cl||''}" aria-sort="${k===key2?(d===1?'ascending':'descending'):'none'}"><button style="background:none;border:0;cursor:pointer;font:inherit;color:inherit;padding:0" onclick="srt('${key2}')">${t}${k===key2?(d===1?' ↑':' ↓'):''}</button></th>`;
+return `<div class="card" style="padding:4px 8px"><table class="tbl"><thead><tr>${th('n','Cliente')}${th('t','Entrenador','hm')}${th('w','Semana','hm')}${th('r','Último registro','hm')}${th('p','Pago')}<th></th></tr></thead><tbody>${v.map(c=>`<tr class="click" tabindex="0" onclick="nv('cls',0,${c.id},'cls')" onkeydown="if(event.key==='Enter')nv('cls',0,${c.id},'cls')"><td><span class="ini">${c.n.split(' ').map(x=>x[0]).join('')}</span>${c.n}<a class="mo sm" href="#" style="color:var(--acc)" onclick="event.stopPropagation();nv('trs',${c.tid});return false">${tn(c)}</a></td><td class="hm"><a href="#" style="color:var(--acc)" onclick="event.stopPropagation();nv('trs',${c.tid});return false">${tn(c)}</a></td><td class="hm">${wk(c,1).replace('Semana ','')}</td><td class="hm">${c.lastRec}</td><td>${chip(c.pay)}</td><td class="mut">›</td></tr>`).join('')||`<tr><td colspan="6" class="mut">Ningún cliente coincide con los filtros. <a href="#" style="color:var(--acc)" onclick="S.q2='';S.fe='';S.fp='';R();return false">Limpiar filtros</a></td></tr>`}</tbody></table></div>
+<div class="row sp sm mut" style="margin-top:8px"><span>${l.length?'Mostrando '+((pg-1)*PS+1)+'–'+Math.min(pg*PS,l.length)+' de '+l.length:'0 resultados'}</span><span class="row"><button class="btn s" ${pg<=1?'disabled':''} onclick="S.pg=${pg-1};acl()">Anterior</button><span>Página ${pg} de ${pages}</span><button class="btn s" ${pg>=pages?'disabled':''} onclick="S.pg=${pg+1};acl()">Siguiente</button></span></div>${!filt&&xx?`<p class="sm mut">Hay ${xx} clientes más que no están cargados en el prototipo.</p>`:''}`}
+function clsV(){return `${crumbs([['Inicio',"nv('dash')"],['Clientes']])}<h1>Clientes</h1><div class="mut">Busca, filtra y ordena a todos los clientes de la plataforma</div>
+<div class="row" style="margin:14px 0"><input placeholder="Buscar cliente…" aria-label="Buscar cliente" value="${esc(S.q2||'')}" style="max-width:240px" oninput="S.q2=this.value;S.pg=1;acl()"><select aria-label="Entrenador" style="width:auto" onchange="S.fe=this.value;S.pg=1;acl()"><option value="">Todos los entrenadores</option>${D.trainers.map(t=>`<option value="${t.id}" ${+S.fe===t.id?'selected':''}>${t.n}</option>`).join('')}</select><select aria-label="Pago" style="width:auto" onchange="S.fp=this.value;S.pg=1;acl()">${[['','Todos los pagos'],['ok','Al día'],['att','Pendiente o vencido']].map(o=>`<option value="${o[0]}" ${(S.fp||'')===o[0]?'selected':''}>${o[1]}</option>`).join('')}</select></div><div id="acl">${aclV()}</div>`}
+// VISTA MENSUAL, CAMBIOS SIN GUARDAR, PRIMER INGRESO
+function tplDel(k,id){D.tpl[k]=D.tpl[k].filter(x=>x.id!==id);k==='rut'?tplApply():ntApply();toast('Plantilla eliminada')}
+function rutinaV(isTr){const m=S.rm==='mes',b=(v,t)=>`<button class="btn s" style="border:0;${(m?'mes':'sem')===v?'background:var(--ink);color:var(--bg)':''}" onclick="S.rm='${v}';R()">${t}</button>`;
+return `<div class="row" style="margin-bottom:10px;background:var(--fill);border:1px solid var(--line);border-radius:10px;padding:3px;width:fit-content;gap:2px">${b('sem','Semana')}${b('mes','Mes')}</div>`+(m?calV(cur()):rutinaVweek(isTr))}
+function exitEd(){if(JSON.stringify(S.ed.r)===S.ed.base){S.ed=null;R();return}
+modal(`<h2>Tienes cambios sin guardar</h2><p>Si sales ahora, se perderán los cambios de esta rutina.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Seguir editando</button><button class="btn" onclick="mc();S.ed=null;R()">Salir sin guardar</button><button class="btn p" onclick="mc();saveEd()">Guardar y salir</button></div>`)}
+addEventListener('beforeunload',e=>{if(S.ed&&JSON.stringify(S.ed.r)!==S.ed.base){e.preventDefault();e.returnValue=''}});
+function firstV(){return `<div class="login"><div class="l"><div class="logo">FORMA</div><h1>Tu entrenamiento, en un solo lugar</h1><p style="opacity:.8">Rutinas, registros de series y plan nutricional, siempre al día entre tú y tu entrenador.</p></div><div class="r"><h1 style="font-size:26px">Crea tu contraseña</h1><p class="mut">Es tu primer ingreso. Cambia la contraseña temporal por una propia.</p>
+<label for="f0">Contraseña temporal</label><input id="f0" type="password" placeholder="Contraseña que recibiste" oninput="fv()"><label for="f1" style="margin-top:10px">Nueva contraseña</label><input id="f1" type="password" placeholder="Mínimo 8 caracteres" oninput="fv()"><div id="fc" class="sm" style="margin:6px 0"></div><label for="f2">Confirmar nueva contraseña</label><input id="f2" type="password" oninput="fv()">
+<label style="font-weight:400;display:flex;gap:8px;margin:12px 0"><input id="f3" type="checkbox" style="width:auto" onchange="fv()">Acepto los términos, la política de privacidad y el uso de mis datos de salud (peso, medidas, lesiones) para mi entrenamiento.</label><button id="fb" class="btn p" disabled onclick="go('cl')">Guardar y entrar</button><p><a href="#" onclick="S.role=null;R();return false" style="color:var(--acc)" class="sm">‹ Volver al inicio de sesión</a></p></div></div>`}
+function fv(){const a=$('#f1').value,ok=[[a.length>=8,'Mínimo 8 caracteres'],[/[a-zA-Z]/.test(a)&&/\d/.test(a),'Letras y números'],[a&&a===$('#f2').value,'Las contraseñas coinciden']];$('#fc').innerHTML=ok.map(x=>`<div style="color:${x[0]?'var(--ok)':'var(--mut)'}">${x[0]?'✓':'○'} ${x[1]}</div>`).join('');$('#fb').disabled=!(ok.every(x=>x[0])&&$('#f0').value&&$('#f3').checked)}
+// BIBLIOTECA COMPARTIDA SIN DUPLICADOS
+
+const nz=s=>s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ').replace(/\s+/g,' ').trim(),tk=s=>nz(s).split(' ').filter(Boolean).map(w=>w.replace(/s$/,''));
+// REGLA: deteccion de duplicados de ejercicios (normaliza tildes, mayusculas y plurales).
+function sim(a,b){const A=tk(a),B=tk(b);if(!A.length)return 0;if(A.join(' ')===B.join(' '))return 1;const I=A.filter(w=>B.includes(w)).length,U=new Set([...A,...B]).size,pre=A.every(w=>B.some(v=>v.startsWith(w)));return Math.max(I/U,pre?.85:0,nz(b).includes(nz(a))&&nz(a).length>3?.8:0)}
+function dupMatches(n,id){return D.lib.filter(x=>x.id!==id).map(x=>[x,sim(n,x.n)]).filter(m=>m[1]>=.5).sort((a,b)=>b[1]-a[1]).slice(0,5)}
+function dupChk(id){const n=$('#x1').value,m=n.trim().length>=2?dupMatches(n,id):[],ex=m.some(x=>x[1]>=.99),w=m.some(x=>x[1]>=.8);$('#xs').disabled=ex;
+$('#sug').innerHTML=m.length?`<div class="card" style="margin:6px 0;padding:8px;background:${ex?'var(--badb)':w?'var(--warnb)':'var(--fill)'}"><div class="sm" style="font-weight:600;margin-bottom:4px">${ex?'Este ejercicio ya existe. Utilízalo en lugar de crearlo.':w?'Hay ejercicios muy parecidos. Revísalos antes de crear:':'Ejercicios relacionados:'}</div>${m.map(([x])=>`<div class="row sp" style="padding:4px 0"><span>${x.n} <span class="sm mut">· ${x.g} · ${x.eq}</span></span><button class="btn s" onclick="useEx(${x.id})">Usar este</button></div>`).join('')}</div>`:''}
+function useEx(id){const x=D.lib.find(y=>y.id===id);mc();if(S.ed){const d=ED();if(!d.g.includes(x.g))d.g.push(x.g);if(!d.ex.some(e=>e.n===x.n)){te(id);toast('Ejercicio añadido al día');return}R();toast('Ya está en este día');return}S.lg=x.g;S.lt='todos';S.lq=x.n;R();toast('Ese ejercicio ya existe')}
+// HORARIOS Y AGENDA DEL ENTRENADOR
+const WD=['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo'],WS=['Lu','Ma','Mi','Ju','Vi','Sá','Do'],hasSch=d=>d.time&&d.wd!==undefined;
+const schTxt=c=>c.sch&&c.routine.some(hasSch)?'<span class="chip ok">Con horario</span>':'<span class="chip">Sin horario</span>';
+[[1,[1,2,4,5],'18:00'],[2,[0,2,5],'08:00'],[3,[0,1,2,3],'17:00'],[5,[0,2,5],'09:00']].forEach(([id,P,t])=>{D.clients.find(x=>x.id===id).routine.forEach((d,i)=>{if(P[i]!==undefined){d.wd=P[i];d.time=t;d.end=String(+t.slice(0,2)+1).padStart(2,'0')+t.slice(2)}})});
+function sch(k,v){ED()[k]=k==='wd'?(v===''?undefined:+v):v;const d=ED();if(d.time&&d.end&&d.end<=d.time){toast('La hora de fin debe ser posterior a la de inicio');d.end='';R()}}
+function home(){if(S.role==='sa')nv('dash');else{S.cid=null;S.tl=0;S.lib=0;S.ed=null;R()}}
+// AGENDA: MES + SEMANAS
+const TD=new Date(2026,10,14,12),MN=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'],dmy=d=>d.getDate()+' '+MN[d.getMonth()].slice(0,3),M0=2026*12+10;
+function stOf(x){if(x.real)return'Completado';const cur=x.dt>=new Date(2026,10,9,0)&&x.dt<=new Date(2026,10,15,23);return cur&&x.dt<=TD?dayState(x.d):x.dt<TD?'Completado':'Programada'}
+function weeksOf(y,m){const f=new Date(y,m,1,12),l=new Date(y,m+1,0,12),s=new Date(f);s.setDate(1-((f.getDay()+6)%7));const w=[];while(s<=l){const k=[];for(let i=0;i<7;i++)k.push(new Date(s.getFullYear(),s.getMonth(),s.getDate()+i,12));w.push(k);s.setDate(s.getDate()+7)}return w}
+function am(d){S.am=d===0?M0:(S.am??M0)+d;const i=S.am,w=weeksOf(Math.floor(i/12),i%12);S.aw=(w.find(k=>k.some(x=>x.toDateString()===TD.toDateString()))||w[0])[0].getTime();R()}
+const srow=x=>{const s=stOf(x);return `<div class="row sp rowc" ${clk(`S.cid=${x.c.id};S.tab='rutina';R()`)} style="padding:10px 8px;border-top:1px solid var(--line);cursor:pointer"><div class="row"><b style="min-width:96px">${x.t}${x.e?'–'+x.e:''}</b><div><b>${x.c.n}</b><div class="sm mut">${x.d.n}${x.real?' · registrado por el cliente':''}</div></div></div><span class="chip ${s==='Completado'?'ok':s==='En progreso'?'warn':''}">${s}</span></div>`};
+function semV(){const i=S.am??M0,y=Math.floor(i/12),m=i%12,ws=weeksOf(y,m),aw=S.aw||new Date(2026,10,9,12).getTime(),sel=ws.find(k=>k[0].getTime()===aw)||ws[0],days=sel.map(dt=>[dt,sessOn(dt)]).filter(x=>x[1].length);
+return `<div class="row sp" style="margin-bottom:10px"><div class="row"><button class="btn s" aria-label="Mes anterior" onclick="am(-1)">‹</button><h2 style="margin:0;min-width:160px;text-align:center">${MN[m][0].toUpperCase()+MN[m].slice(1)} ${y}</h2><button class="btn s" aria-label="Mes siguiente" onclick="am(1)">›</button></div><button class="btn s" onclick="goToday()">Hoy</button></div>
+<div class="row" style="align-items:flex-start"><div class="card" style="flex:1;min-width:320px"><div style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;text-align:center" class="sm mut"><span></span>${WS.map(x=>`<span>${x}</span>`).join('')}</div>${ws.map(k=>{const s=k[0].getTime()===sel[0].getTime(),cur=k.some(x=>x.toDateString()===TD.toDateString());return `<div class="rowc" ${clk(`S.aw=${k[0].getTime()};R()`)} style="display:grid;grid-template-columns:64px repeat(7,1fr);gap:4px;align-items:center;padding:4px;margin-top:4px;border-radius:10px;cursor:pointer;${s?'background:var(--soft)':''}"><div class="sm" style="font-weight:600">${k[0].getDate()} – ${k[6].getDate()}${cur?'<div class="sm mut" style="font-weight:400">Esta semana</div>':''}</div>${k.map(dt=>{const n=sessOn(dt).length;return `<div class="rowc" role="button" tabindex="0" aria-label="Día ${dt.getDate()}${n?', '+n+' sesiones':''}" onclick="event.stopPropagation();goDay(${dt.getTime()})" onkeydown="if(event.key==='Enter'){event.stopPropagation();goDay(${dt.getTime()})}" style="cursor:pointer;text-align:center;padding:4px 0;border-radius:8px;${dt.getMonth()!==m?'opacity:.4;':''}${dt.toDateString()===TD.toDateString()?'outline:2px solid var(--acc)':''}"><div class="sm">${dt.getDate()}</div>${n?`<span class="chip ok" style="padding:0 6px;font-size:11px">${n}</span>`:'<span style="display:block;height:18px"></span>'}</div>`}).join('')}</div>`}).join('')}</div>
+<div id="wd" class="card" style="flex:1;min-width:300px;max-height:520px;overflow-y:auto;position:relative"><h2>Semana del ${dmy(sel[0])} al ${dmy(sel[6])}</h2>${days.map(([dt,l])=>`<div id="dy${dt.getTime()}" style="margin-top:10px"><div class="sm" style="font-weight:600;color:${dt.toDateString()===TD.toDateString()?'var(--acc)':'var(--mut)'}">${WD[(dt.getDay()+6)%7]} ${dt.getDate()}${dt.toDateString()===TD.toDateString()?' · Hoy':''}</div>${l.map(srow).join('')}</div>`).join('')||'<p class="mut">No hay sesiones esta semana.</p>'}</div></div>`}
+function agendaV(){const m='sem',cs=mine(),sin=cs.filter(c=>!c.sch).length,tdl=sessOn(TD),
+op=(v,t)=>`<button class="btn s" style="border:0;${m===v?'background:var(--ink);color:var(--bg)':''}" onclick="S.av='${v}';R()">${t}</button>`;let nx=null;for(let k=1;k<=14&&!nx;k++){const d=new Date(2026,10,14+k,12),l=sessOn(d);if(l.length)nx=[d,l[0]]}
+return `<div class="row sp"><div><h1>Agenda</h1><div class="mut">Buenos días, Carlos · Sábado 14 de noviembre de 2026</div></div></div>
+<div class="card row sp rowc" ${clk('S.tl=1;R()')} style="margin:12px 0;padding:12px 16px;cursor:pointer"><div class="row" style="gap:20px"><span><span class="sm mut">Mis clientes</span> <b style="font-size:20px">${cs.length}</b></span><span class="sm mut">${sin?sin+' sin horario asignado':'Todos con horario asignado'}</span></div><span style="color:var(--acc)">Ir a mis clientes ›</span></div>
+${m==='hoy'?`<div class="card"><h2>Hoy · ${tdl.length} ${tdl.length===1?'sesión':'sesiones'}</h2>${tdl.map(srow).join('')||'<p class="mut">No tienes sesiones programadas hoy.</p>'}${!tdl.length&&nx?`<p class="sm mut">Próxima: ${WD[(nx[0].getDay()+6)%7]} ${nx[0].getDate()} · ${nx[1].t} · ${nx[1].c.n}</p>`:''}</div>`:semV()}`}
+function goToday(){am(0);const c=$('#wd'),e=$('#dy'+TD.getTime());if(!c)return;if(e){c.scrollTop=e.offsetTop-8;e.style.background='var(--soft)';e.style.borderRadius='8px';e.style.padding='6px'}else toast('Hoy no tienes sesiones programadas')}
+function goDay(ts){const dt=new Date(ts);S.aw=new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()-((dt.getDay()+6)%7),12).getTime();R();const c=$('#wd'),e=$('#dy'+ts);if(!c)return;c.scrollIntoView({block:'nearest'});if(e){c.scrollTop=e.offsetTop-8;e.style.background='var(--soft)';e.style.borderRadius='8px';e.style.padding='6px'}else toast('Sin sesiones ese día')}
+// HORARIO ASIGNADO vs REGISTRADO POR EL CLIENTE; NOMBRE AUTOMÁTICO DEL DÍA
+D.clients.forEach(c=>c.sch=c.routine.some(hasSch));
+// REGLA: nombre del dia automatico segun grupos en orden de seleccion, hasta que el entrenador lo edite.
+const genName=(d,i)=>'Día '+(i+1)+(d.g.length?' · '+d.g.map((x,j)=>j?x.toLowerCase():x).join(' y '):'');
+// REGLA: horario asignado si/no; nunca se expone si el cliente es virtual.
+const schSwitch=c=>`<label class="row" style="gap:6px;font-weight:400;margin:0" title="Si está desactivado, el cliente registra a qué hora entrena"><input type="checkbox" style="width:auto" ${c.sch?'checked':''} onchange="cur().sch=this.checked;notify('cl',this.checked?'Carlos activó tu horario asignado':'Ahora registras tú a qué hora entrenas',cur().id,'rutina');R();toast(this.checked?'Horario asignado por el entrenador':'El cliente registrará su horario')"> Horario asignado</label>`;
+// REGLA: agenda del entrenador. Con horario asignado usa el horario; sin el, usa el registro real del cliente.
+function sessOn(dt){const wd=(dt.getDay()+6)%7,iso=dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+return mine().flatMap(c=>c.routine.flatMap(d=>c.sch?(hasSch(d)&&d.wd===wd&&dt>=new Date(c.start+'T12:00:00')?[{c,d,t:d.time,e:d.end,dt}]:[]):(d.real&&d.real.ini&&d.real.d===iso?[{c,d,t:d.real.ini,e:d.real.fin,dt,real:1}]:[]))).sort((a,b)=>a.t.localeCompare(b.t))}
+function realV(d,di,isTr){const c=cur(),r=d.real;if(c.sch)return'';
+if(isTr)return r&&r.ini?`<div class="sm" style="margin-top:10px">Entrenó el ${dmy(new Date(r.d+'T12:00:00'))} · ${r.ini}${r.fin?'–'+r.fin:''}</div>`:'';
+return `<div style="margin-top:10px"><div class="sm" style="font-weight:600">¿A qué hora entrenaste?</div><div class="row">${[['d','Fecha','date',r?r.d:'2026-11-14'],['ini','Inicio','time',r?r.ini:''],['fin','Fin','time',r?r.fin:'']].map(f=>`<div><label class="sm" for="r${f[0]}${di}">${f[1]}</label><input id="r${f[0]}${di}" type="${f[2]}" style="width:auto" value="${f[3]}" onchange="setReal(${di},'${f[0]}',this.value)"></div>`).join('')}</div></div>`}
+function setReal(di,k,v){const d=cur().routine[di];d.real=d.real||{d:'2026-11-14',ini:'',fin:''};d.real[k]=v;if(d.real.ini&&d.real.fin&&d.real.fin<=d.real.ini){toast('La hora de fin debe ser posterior a la de inicio');d.real.fin='';R();return}toast('Guardado')}
+// NOTIFICACIONES, CONFIRMACIÓN DEL DÍA, SERIES BLOQUEADAS, DETALLE MENSUAL
+D.clients[0].routine[0].done={by:'Laura',at:'12 nov 18:40'};
+D.notif=[{id:1,to:'cl',cid:1,msg:'Tu plan vence el 09 dic',tab:'rutina',t:'12 nov 09:00',read:false},{id:2,to:'cl',cid:1,msg:'Carlos te asignó horario de entrenamiento',tab:'rutina',t:'10 nov 17:30',read:true},{id:3,to:'tr',cid:2,msg:'Andrés Pardo: su pago vence el 17 nov',tab:'pagos',t:'13 nov 08:00',read:false},{id:4,to:'tr',cid:4,msg:'Julián Ortiz: su pago está vencido',tab:'pagos',t:'13 nov 08:00',read:false},{id:5,to:'tr',cid:1,msg:'Laura Gómez registró su entrenamiento: Día 1',tab:'rutina',t:'12 nov 19:10',read:false},{id:6,to:'sa',msg:'Paula Niño: cuenta suspendida',t:'11 nov 10:00',read:true}];
+let NID=100;
+// REGLA: notificacion por rol con redireccion (cid, tab, day).
+function notify(to,msg,cid,tab,day){D.notif.unshift({id:NID++,to,msg,cid,tab,day,t:'14 nov '+new Date().toTimeString().slice(0,5),read:false})}
+const mineN=()=>D.notif.filter(n=>n.to===S.role&&(S.role!=='cl'||n.cid===1));
+function bellV(){const u=mineN().filter(n=>!n.read).length;return `<button onclick="S.np=!S.np;S.menu=false;R()" aria-label="Notificaciones${u?', '+u+' sin leer':''}" style="position:relative;background:none;border:0;color:#f1efe9;font-size:18px;cursor:pointer">🔔${u?`<span style="position:absolute;top:-4px;right:-6px;background:#f97316;color:#17181c;border-radius:99px;font-size:11px;font-weight:700;padding:0 5px">${u}</span>`:''}</button>`}
+function npV(){return `<div class="menu" style="position:fixed;top:calc(54px + env(safe-area-inset-top,0px));width:min(380px,92vw);max-height:70vh;overflow:auto;z-index:6"><div class="row sp" style="padding:6px 10px"><b>Notificaciones</b><button class="btn s" onclick="mineN().forEach(n=>n.read=true);R()">Marcar leídas</button></div>${mineN().slice(0,10).map(n=>`<button onclick="nGo(${n.id})" style="${n.read?'':'font-weight:600'}">${n.read?'':'● '}${esc(n.msg)}<span class="sm mut" style="display:block;font-weight:400">${n.t}</span></button>`).join('')||'<p class="mut" style="padding:6px 10px">Sin notificaciones.</p>'}</div>`}
+function nGo(id){const n=D.notif.find(x=>x.id===id);n.read=true;S.np=false;if(n.day)S.cd=n.day;if(S.role==='tr'&&n.cid){S.cid=n.cid;S.tl=1;S.lib=0;S.ed=null;S.tab=n.tab||'resumen'}else if(S.role==='cl'){S.tab=n.tab||'rutina';if(n.day)S.rm='mes'}else if(S.role==='sa'&&n.cid){S.cid=0;S.cv=n.cid;S.from='dash';S.tv=0;S.lib=0}R()}
+function askDone(di){modal(`<h2>¿Confirmas el entrenamiento?</h2><p>Se registrará la fecha y hora de este momento y <b>no se podrá desactivar</b>.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="setDone(${di})">Confirmar</button></div>`)}
+function setDone(di){const c=cur(),d=c.routine[di],cl=S.role==='cl',who=cl?'Laura':'Carlos';d.done={by:who,at:'14 nov '+new Date().toTimeString().slice(0,5)};notify(cl?'tr':'cl',cl?c.n+' registró su entrenamiento: '+d.n:'Carlos marcó tu entrenamiento: '+d.n,c.id,'rutina');mc();R();toast('Entrenamiento registrado')}
+function rmDay(){const d=ED();if(d.done||d.ex.some(e=>e.logs.some(Boolean))){toast('No se puede quitar un día con entrenamiento registrado');return}modal(`<h2>¿Quitar ${esc(d.n)}?</h2><p>Se quitará de la rutina al guardar y los días siguientes se renumerarán.</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="doRmDay()">Quitar día</button></div>`)}
+function doRmDay(){const E=S.ed;E.r.splice(E.day,1);E.r.forEach((d,i)=>{if(d.auto)d.n=genName(d,i)});E.day=Math.max(0,E.day-1);mc();R()}
+// REGLA: series bloqueadas una vez confirmadas; campos deshabilitados fuera del dia actual.
+function exV(e,di,ei,isTr){const u=e.t==='seg'?'Seg':'Reps';e.dr=e.dr||[];const ro=!isToday(cur(),cur().routine[di]);
+return `<div class="ex"><div class="row sp"><b>${e.n}</b><span class="sm mut">Meta: ${e.s} × ${e.r}${e.t==='seg'?' s':' reps'} · descanso ${isTr?`<input type="number" value="${e.rest}" style="width:64px;padding:3px 6px" aria-label="Descanso en segundos" onchange="cur().routine[${di}].ex[${ei}].rest=+this.value;toast('Guardado')">`:e.rest} s</span></div>${e.note?`<div class="sm mut">Nota: ${esc(e.note)}</div>`:''}${e.last?`<div class="sm" style="color:var(--acc)">Última vez: ${e.last}</div>`:''}<div class="sets">${Array.from({length:e.s},(_,i)=>{const l=e.logs[i],v=l||e.dr[i]||[],lk=l||ro?'disabled':'';return `<div class="set ${l?'done':''}"><div class="sm mut">Serie ${i+1}</div><div class="row">${e.t==='seg'?'':`<input type="number" inputmode="decimal" aria-label="Kg" placeholder="Kg" value="${v[0]??''}" ${lk} onchange="lg(${di},${ei},${i},0,this.value)">`}<input type="number" inputmode="numeric" aria-label="${u}" placeholder="${u}" value="${v[1]??''}" ${lk} onchange="lg(${di},${ei},${i},1,this.value)"><button class="ck" aria-label="Confirmar serie" ${lk} onclick="lg(${di},${ei},${i},2)">✓</button></div>${l?`<div class="by">${l[2]} · ${l[3]}</div>`:''}</div>`}).join('')}</div></div>`}
+// REGLA: la serie se confirma con la marca y queda bloqueada; solo el dia actual.
+function lg(di,ei,i,f,v){const e=cur().routine[di].ex[ei],who=S.role==='cl'?'Laura':'Carlos';if(e.logs[i])return;if(!isToday(cur(),cur().routine[di])){toast('Solo puedes registrar el entrenamiento del día actual');return}e.dr=e.dr||[];e.dr[i]=e.dr[i]||['',''];if(f<2){e.dr[i][f]=v;return}
+const d=e.dr[i];if(!d[1]||(e.t!=='seg'&&d[0]==='')){toast('Completa kg y reps antes de confirmar');return}e.logs[i]=[d[0],d[1],who,new Date().toTimeString().slice(0,5)];const y=scrollY;R();scrollTo(0,y);toast('Serie confirmada · ya no se puede modificar')}
+function exSum(d){return d.ex.map(e=>`<div style="padding:6px 0;border-top:1px solid var(--line)"><b>${e.n}</b><div class="sm mut">${e.logs.filter(Boolean).map(l=>e.t==='seg'?l[1]+' s':l[0]+' kg × '+l[1]).join(' · ')||'Sin series confirmadas'}</div></div>`).join('')}
+// APLAZAMIENTOS DE ENTRENAMIENTO
+D.clients[0].pp=[{id:1,mode:'day',from:17,to:18,time:'',reason:'Tengo una cita médica',by:'cl',at:'13 nov 20:15',status:'pend'}];
+D.notif.unshift({id:7,to:'tr',cid:1,msg:'Laura Gómez solicitó aplazar el entrenamiento del 17 de nov',tab:'resumen',day:17,t:'13 nov 20:15',read:false});
+const ppTxt=p=>`${p.mode==='block'?'Mover bloque desde el '+p.from+' (cada día +'+(p.k||1)+')':'Mover el '+p.from+' al '+p.to+(p.time?' a las '+p.time:'')} · ${p.by==='tr'?'Carlos':'Laura'} · ${p.at}${p.reason?' · “'+esc(p.reason)+'”':''}`;
+// REGLA: calendario efectivo = horario base + aplazamientos aprobados (modo bloque k dias / solo dia). Los seed no afectan.
+function planOf(c){const sc=c.routine.filter(d=>d.time&&d.wd!==undefined),P=sc.length?sc.map(d=>d.wd):{2:[0,3],3:[0,2,4],4:[0,1,3,4],5:[0,1,2,3,4],6:[0,1,2,3,4,5]}[c.days]||[0,2,4],st=new Date(c.start+'T12:00:00'),ev={},po={},pend={};
+for(let d=1;d<=30;d++){const dt=new Date(2026,10,d,12),wd=(dt.getDay()+6)%7;if(P.includes(wd)&&dt>=st){const i=P.indexOf(wd);ev[d]=[{rd:sc.length?sc[i]:c.routine[i],i}]}}
+(c.pp||[]).filter(p=>p.status==='ok'&&!p.seed).forEach(p=>{if(p.mode==='block'){const end=Math.min(p.from+(6-((new Date(2026,10,p.from,12).getDay()+6)%7)),30);for(let d=end;d>=p.from;d--)if(ev[d]){const t=d+(p.k||1);ev[t]=(ev[t]||[]).concat(ev[d].map(e=>({...e,pm:p})));delete ev[d];po[d]=p}}else if(ev[p.from]){if(p.to===p.from){ev[p.from][0].tm=p.time;ev[p.from][0].pm=p}else{ev[p.to]=(ev[p.to]||[]).concat(ev[p.from].map(e=>({...e,pm:p,tm:p.time})));delete ev[p.from];po[p.from]=p}}});
+(c.pp||[]).filter(p=>p.status==='pend').forEach(p=>pend[p.from]=p);return{ev,po,pend}}
+// REGLA: aplazar = mover bloque (k dias) o mover solo este entrenamiento a otro dia/hora; nunca hacia atras.
+function ppOpen(from){const {ev}=planOf(cur()),o=[];for(let d=14;d<=30;d++)o.push(`<option value="${d}" ${d===from+1?'selected':''}>${WD[(new Date(2026,10,d,12).getDay()+6)%7]} ${d}${ev[d]?' · con rutina':' · libre'}</option>`);
+const op=(v,t,s,ck)=>`<label class="card" style="display:flex;gap:10px;font-weight:400;cursor:pointer;padding:12px;margin-bottom:8px"><input type="radio" name="pm" value="${v}" ${ck?'checked':''} style="width:auto"><span><b>${t}</b><span class="sm mut" style="display:block">${s}</span></span></label>`;
+modal(`<h2>Aplazar el entrenamiento del ${from} de noviembre</h2>${op('block','Mover bloque',from<14?'Este día pasa a hoy y los siguientes de la semana se corren la misma cantidad de días.':'Este día y los siguientes de la semana se corren un día.',1)}${op('day','Mover solo este entrenamiento','Elige el día (con rutina o libre) y, si quieres, la hora.',0)}<div class="row"><div><label for="pd">Nuevo día</label><select id="pd" style="width:auto">${o.join('')}</select></div><div><label for="pt">Nueva hora (opcional)</label><input id="pt" type="time" style="width:auto"></div></div><p class="sm mut">Aplica solo al periodo actual del plan. Al renovar, vuelve al horario base.</p><label for="pr" style="margin-top:8px">Motivo</label><textarea id="pr" rows="2"></textarea><p class="sm mut">${S.role==='cl'?'Tu entrenador debe aprobarlo. Si el día termina sin entrenar, queda como no entrenado.':'No requiere aprobación: se notificará al cliente.'}</p><div class="row" style="justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button class="btn p" onclick="ppSave(${from})">${S.role==='cl'?'Enviar solicitud':'Aplazar'}</button></div>`)}
+// REGLA: cliente => solicitud pendiente (aprueba el entrenador); entrenador => se aplica directo y se notifica.
+function ppSave(from){const c=cur(),mode=document.querySelector('input[name=pm]:checked').value,to=+$('#pd').value,time=$('#pt').value,cl=S.role==='cl';if(mode==='day'&&to===from&&!time){toast('Elige otro día u otra hora');return}
+c.pp=c.pp||[];c.pp.push({id:Date.now(),mode,from,k:mode==='block'?(from<14?14-from:1):0,to:mode==='day'?to:null,time:mode==='day'?time:'',reason:$('#pr').value.trim(),by:S.role,at:'14 nov '+new Date().toTimeString().slice(0,5),status:cl?'pend':'ok'});
+if(cl)notify('tr',c.n+' solicitó aplazar el entrenamiento del '+from+' de nov',c.id,'resumen',from);else notify('cl','Carlos aplazó tu entrenamiento del '+from+' de nov',c.id,'rutina',from);S.cd=from;mc();R();toast(cl?'Solicitud enviada':'Entrenamiento aplazado')}
+function ppRes(id,r){const c=cur(),p=c.pp.find(x=>x.id===id);p.status=r;p.res={by:'Carlos',at:'14 nov '+new Date().toTimeString().slice(0,5)};notify('cl','Carlos '+(r==='ok'?'aprobó':'rechazó')+' tu aplazamiento del '+p.from+' de nov',c.id,'rutina',p.from);R();toast(r==='ok'?'Aplazamiento aprobado · rutina actualizada':'Aplazamiento rechazado')}
+function calV(c){const {ev,po,pend}=planOf(c),sel=S.cd||14,lb={done:'Entrenado',miss:'No entrenado',plan:'Programado',pp:'Aplazado',pend:'Aplazamiento solicitado'},cs={done:'background:var(--okb);color:var(--ok);font-weight:600',miss:'background:var(--badb);color:var(--bad)',plan:'border:1px dashed var(--line)',pp:'border:2px solid #f97316',pend:'border:2px dashed #f97316'},stt={};let h='',nd=0,np=0;for(let i=0;i<6;i++)h+='<div></div>';
+for(let d=1;d<=30;d++){const E=ev[d];let s='';if(E){if(d<9)s='done';else if(d<=15)s=E.some(e=>e.i<c.done&&!e.pm)?'done':d<14?'miss':'plan';else s='plan';if(pend[d]&&s==='plan')s='pend'}else if(po[d])s='pp';if(E&&cnOf(c,d))s='miss';stt[d]=s;if(s==='done')nd++;if(s==='plan'||s==='pend')np++;
+h+=`<div class="rowc" role="button" tabindex="0" aria-label="Día ${d}" onclick="S.cd=${d};R()" onkeydown="if(event.key==='Enter'){S.cd=${d};R()}" style="cursor:pointer;aspect-ratio:1;display:grid;place-items:center;border-radius:8px;font-size:13px;${cs[s]||''}${d===14?';outline:2px solid #fff;outline-offset:-2px;box-shadow:0 0 0 1px var(--line)':''}${d===sel?';box-shadow:0 0 0 2px var(--ink)':''}">${d}</div>`}
+const s=stt[sel],E=ev[sel],p0=po[sel],cw=sel>=9&&sel<=15,lbl=WD[(new Date(2026,10,sel,12).getDay()+6)%7]+' '+sel+' de noviembre',pe=pend[sel],
+rows=(E||[]).map(e=>{const d=e.rd;return `<div style="padding:6px 0;border-top:1px solid var(--line)"><b>${esc(d.n)}</b>${c.sch&&hasSch(d)?` <span class="sm mut">${e.tm||d.time}${d.end&&!e.tm?'–'+d.end:''}</span>`:''}${e.pm?`<div class="sm mut">Movido desde el ${e.pm.from} de nov</div>`:''}${d.done&&cw?`<div class="sm mut">Marcado por ${d.done.by} · ${d.done.at}</div>`:''}${s==='done'?exDet(c,d,sel):''}</div>`}).join(''),
+log=(c.pp||[]).filter(p=>p.from===sel||p.to===sel).map(p=>`<div class="sm mut" style="margin-top:6px">${ppTxt(p)} · ${p.status==='ok'?'Aprobado':p.status==='no'?'Rechazado':'Pendiente'}</div>`).join('');
+return `<div class="row" style="align-items:flex-start"><div class="card" style="flex:1;min-width:300px"><div class="row sp"><h2 style="margin:0">Noviembre 2026</h2><span class="sm mut">${nd} entrenados · ${np} programados</span></div><div style="display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px">${WS.map(x=>`<div class="sm mut" style="text-align:center">${x}</div>`).join('')}${h}</div><div class="row sm" style="margin-top:12px"><span class="chip ok">Entrenado</span><span class="chip bad">No entrenado</span><span class="chip">Programado</span><span class="chip" style="border:2px solid #f97316">Aplazado</span><span class="chip" style="border:2px solid #fff;box-shadow:0 0 0 1px var(--line)">Hoy</span></div></div>
+<div style="flex:1;min-width:280px"><div class="card"><div class="row sp"><h2 style="margin:0">${lbl}</h2>${s?`<span class="chip ${s==='done'?'ok':s==='miss'?'bad':s==='pp'||s==='pend'?'warn':''}">${lb[s]}</span>`:''}</div>${E?rows:p0?`<p style="margin-top:8px"><b>Día de entrenamiento aplazado.</b> ${p0.mode==='block'?'Se movió con el bloque de la semana.':'Se movió al '+p0.to+' de nov.'}</p>`:'<p class="mut">Día de descanso. No hay entrenamiento programado.</p>'}${log}${cnTxt(c,sel)}${E&&sel>=14&&s!=='done'&&s!=='miss'&&!pe&&!cnOf(c,sel)&&!E.every(e=>e.rd.done)?`<div class="row" style="margin-top:10px"><button class="btn" onclick="ppOpen(${sel})">${S.role==='tr'?'Aplazar entrenamiento':'Solicitar aplazamiento'}</button><button class="btn" onclick="cancelOpen(${sel})">Cancelar rutina</button></div>`:''}</div>
+${pe?`<div class="card" style="border-color:#f97316"><h2>Aplazamiento solicitado</h2><p>${ppTxt(pe)}</p>${S.role==='tr'?`<div class="row"><button class="btn p" onclick="ppRes(${pe.id},'ok')">Aprobar</button><button class="btn" onclick="ppRes(${pe.id},'no')">Rechazar</button></div>`:'<p class="sm mut">Pendiente de aprobación de tu entrenador.</p>'}</div>`:''}</div></div>`}
+// APLAZAR/CANCELAR DESDE LA SEMANA
+const cnOf=(c,day)=>(c.cn||[]).find(x=>x.day===day);
+const cnTxt=(c,day)=>{const x=cnOf(c,day);return x?`<div class="sm" style="margin-top:8px;color:var(--bad)">Rutina cancelada por ${x.by==='tr'?'Carlos':'Laura'} el ${x.at}${x.reason?' · “'+esc(x.reason)+'”':''}</div>`:''};
+function dayDate(c,rd){const {ev}=planOf(c);for(let d=9;d<=15;d++)if((ev[d]||[]).some(e=>e.rd===rd))return d;return null}
+function cancelOpen(day){modal(`<h2>¿Cancelar el entrenamiento del ${day} de noviembre?</h2><p>El día quedará como <b>no entrenado</b> y el detalle mostrará que fue cancelado. Se notificará a ${S.role==='cl'?'tu entrenador':'el cliente'}.</p><label for="cr">Motivo (opcional)</label><textarea id="cr" rows="2"></textarea><div class="row" style="justify-content:flex-end;margin-top:12px"><button class="btn" onclick="mc()">Volver</button><button class="btn p" onclick="cancelSave(${day})">Cancelar rutina</button></div>`)}
+// REGLA: cancelar no requiere aprobacion; el dia queda no entrenado con comentario visible.
+function cancelSave(day){const c=cur(),cl=S.role==='cl';c.cn=c.cn||[];c.cn.push({id:Date.now(),day,reason:$('#cr').value.trim(),by:S.role,at:'14 nov '+new Date().toTimeString().slice(0,5)});
+if(cl)notify('tr',c.n+' canceló el entrenamiento del '+day+' de nov',c.id,'resumen',day);else notify('cl','Carlos canceló tu entrenamiento del '+day+' de nov',c.id,'rutina',day);S.cd=day;mc();R();toast('Rutina cancelada')}
+// ACCIONES JUNTO A MARCAR ENTRENAMIENTO + GRÁFICA DE PROGRESO POR EJERCICIO
+function ppBtn(d){const c=cur(),n=dayDate(c,d);return n&&cnOf(c,n)?cnTxt(c,n):''}
+// REGLA: botones aplazar/cancelar solo en dias programados futuros, sin entrenar ni cancelados; marcar entrenamiento solo el dia actual e irreversible.
+function gateV(d,di,isTr){const c=cur(),n=dayDate(c,d);if(n&&cnOf(c,n))return'';
+return `<div class="card" style="background:var(--fill);margin-top:10px"><p class="mut" style="margin:0 0 8px">Marca el día cuando ${isTr?'el cliente entrene':'empieces a entrenar'} para registrar kilos y repeticiones. Una vez marcado, no se puede deshacer.</p><div class="row"><button class="btn p" onclick="askDone(${di})">${isTr?'Marcar entrenamiento realizado':'Hoy sí entrené'}</button>${n&&n>=14&&!isDone(c,d,n)?`<button class="btn" onclick="ppOpen(${n})">${isTr?'Aplazar o mover entrenamiento':'Solicitar aplazar o mover'}</button><button class="btn" onclick="cancelOpen(${n})">Cancelar entrenamiento</button>`:''}</div></div>`}
+const PRD=[[30,'30 días'],[90,'3 meses'],[180,'6 meses'],[365,'1 año']],hash=s=>[...s].reduce((a,ch)=>(a*31+ch.charCodeAt(0))%997,7);
+// SIMULADO: en produccion usar las series confirmadas reales.
+function sessions(c,ex,days){const dd=c.routine.find(d=>d.ex.some(e=>e.n===ex.n));if(!dd)return[];const i=c.routine.indexOf(dd),wds=(dd.wd!==undefined?[dd.wd]:[[0,2,4,5][i%4]]).flatMap(w=>[w,(w+3)%7]),st=new Date((c.chartFrom||c.start)+'T12:00:00'),from=new Date(Math.max(st,TD-days*864e5)),out=[],base=bw(ex.n);
+for(const t=new Date(from);t<=TD;t.setDate(t.getDate()+1)){if(wds.includes((t.getDay()+6)%7)){const k=Math.round((t-st)/864e5),n=Math.sin(k*1.7+hash(ex.n));out.push({d:new Date(t),w:ex.t==='seg'?0:Math.round(base*(1+k*.0008+n*.03)*2)/2,r:Math.max(5,Math.round(ex.r+n*2.2))})}}return out}
+// REGLA: grafica de barras peso/reps por dia de entrenamiento, periodo 30d/3m/6m/1a, scroll horizontal. DATOS SIMULADOS.
+function chartV(c){const exs=[...new Set(c.routine.flatMap(d=>d.ex.map(e=>e.n)))];if(!exs.length)return '<div class="card"><h2>Progreso por ejercicio</h2><p class="mut">Aún no hay ejercicios en la rutina.</p></div>';
+const sel=exs.includes(S.pe)?S.pe:exs[0],pr=S.pr||30,ex=c.routine.flatMap(d=>d.ex).find(e=>e.n===sel),ss=sessions(c,ex,pr),mw=Math.max(...ss.map(x=>x.w),1),mr=Math.max(...ss.map(x=>x.r),1),gw=48,W=Math.max(ss.length*gw+30,300),sg=ex.t==='seg',
+bars=ss.map((x,i)=>{const hw=x.w/mw*140,hr=x.r/mr*140,x0=20+i*gw;return `<rect x="${x0}" y="${170-hw}" width="16" height="${hw}" rx="3" fill="var(--acc)"/><rect x="${x0+18}" y="${170-hr}" width="16" height="${hr}" rx="3" fill="var(--ok)"/>${sg?'':`<text x="${x0+8}" y="${166-hw}" font-size="9" text-anchor="middle" fill="var(--ink)">${x.w}</text>`}<text x="${x0+26}" y="${166-hr}" font-size="9" text-anchor="middle" fill="var(--ink)">${x.r}</text><text x="${x0+17}" y="190" font-size="9" text-anchor="middle" fill="var(--mut)">${x.d.getDate()}/${x.d.getMonth()+1}</text>`}).join(''),sq=col=>`<span style="display:inline-block;width:10px;height:10px;background:var(${col});border-radius:2px"></span>`;
+return `<div class="card"><h2 style="margin:0 0 10px">Progreso por ejercicio</h2><div class="row" style="align-items:flex-start"><div role="radiogroup" aria-label="Ejercicio" style="min-width:190px;max-width:240px;order:2">${exs.map(n=>`<label style="display:flex;gap:8px;font-weight:400;padding:6px 0;cursor:pointer"><input type="radio" name="exr" value="${esc(n)}" style="width:auto" ${n===sel?'checked':''} onchange="S.pe=this.value;R()">${esc(n)}</label>`).join('')}</div><div style="flex:1 1 320px;min-width:0;order:1">
+<div class="row" style="margin:10px 0">${PRD.map(p=>`<button class="btn s" style="${pr===p[0]?'background:var(--ink);color:var(--bg)':''}" onclick="S.pr=${p[0]};R()">${p[1]}</button>`).join('')}</div>
+<div class="row sm" style="margin-bottom:6px">${sg?'':`<span>${sq('--acc')} Peso (kg)</span>`}<span>${sq('--ok')} ${sg?'Segundos':'Repeticiones'}</span><span class="mut">${ss.length} entrenamientos</span></div>
+${ss.length?`<div style="overflow-x:auto"><svg width="${W}" height="210" viewBox="0 0 ${W} 210" role="img" aria-label="Peso y repeticiones por entrenamiento">${bars}<line x1="14" y1="170" x2="${W-6}" y2="170" stroke="var(--line)"/></svg><img src="x:" alt="" style="display:none" onerror="this.parentNode.scrollLeft=1e6;this.remove()"></div>`:'<p class="mut">Sin entrenamientos en este periodo.</p>'}<p class="sm mut">Cada grupo de barras es un día de entrenamiento. Desliza hacia los lados para ver más. Datos de ejemplo.</p></div></div></div>`}
+// MÁS DATOS DE PRUEBA PARA LA GRÁFICA (historial de 1 año en los 5 primeros clientes)
+D.clients.slice(0,5).forEach(c=>c.chartFrom='2025-11-10');
+// SOLO DÍAS PROGRAMADOS SIN ENTRENAR + HISTORIAL DESPLEGABLE Y PAGINADO
+const isDone=(c,d,n)=>{if(d.done||n<9)return true;const e=(planOf(c).ev[n]||[]).find(x=>x.rd===d);return !!e&&!e.pm&&n<=15&&e.i<c.done};
+D.clients[0].pp.push(...[[2,1,2,'cl','no','Trabajo'],[3,4,6,'cl','ok','Viaje'],[4,7,8,'tr','ok',''],[5,8,9,'cl','no','Cita médica'],[6,11,12,'cl','ok','Lluvia'],[7,1,3,'tr','ok','']].map(([id,f,t,by,st,r])=>({id,seed:true,mode:'day',from:f,to:t,time:'',reason:r,by,at:(20+id)+' oct 18:00',status:st,res:{by:'Carlos',at:(20+id)+' oct 20:00'}})));
+// REGLA: trazabilidad de aplazamientos y cancelaciones, desplegable y paginada.
+function ppHist(c){const l=[...(c.pp||[]).map(p=>({id:p.id,t:ppTxt(p)+(p.res?' · resuelto por '+p.res.by+' '+p.res.at:''),c:p.status==='ok'?'ok':p.status==='no'?'bad':'warn',s:p.status==='ok'?'Aprobado':p.status==='no'?'Rechazado':'Pendiente'})),...(c.cn||[]).map(x=>({id:x.id,t:'Cancelación del '+x.day+' de nov · '+(x.by==='tr'?'Carlos':'Laura')+' · '+x.at+(x.reason?' · “'+esc(x.reason)+'”':''),c:'bad',s:'Cancelado'}))].sort((a,b)=>b.id-a.id),P5=5,pages=Math.max(1,Math.ceil(l.length/P5)),pg=Math.min(S.hpg||1,pages),v=l.slice((pg-1)*P5,pg*P5);
+return `<details class="card" ${S.hp?'open':''} ontoggle="S.hp=this.open"><summary style="cursor:pointer;font-weight:600">Historial de aplazamientos y cancelaciones <span class="chip">${l.length}</span></summary><div style="margin-top:8px">${v.map(x=>`<div class="row sp" style="padding:7px 0;border-top:1px solid var(--line)"><span class="sm">${x.t}</span><span class="chip ${x.c}">${x.s}</span></div>`).join('')||'<p class="mut">Sin registros.</p>'}</div>${l.length>P5?`<div class="row sp sm mut" style="margin-top:8px"><span>Página ${pg} de ${pages}</span><span class="row"><button class="btn s" ${pg<=1?'disabled':''} onclick="S.hpg=${pg-1};R()">Anterior</button><button class="btn s" ${pg>=pages?'disabled':''} onclick="S.hpg=${pg+1};R()">Siguiente</button></span></div>`:''}</details>`}
+// PROGRESO: GRÁFICA, REGISTRO DESPLEGABLE E HISTORIAL PAGINADO
+D.clients.slice(0,5).forEach(c=>c.weights.unshift(...Array.from({length:12},(_,i)=>({d:dmy(new Date(2026,5,1+i*7,12)),kg:+(72-i*.3).toFixed(1),by:'Carlos'}))));
+// PROGRESO: SECCIÓN COMPLETA DE PESO MOVIDA DEBAJO DE LA GRÁFICA POR EJERCICIO
+// VALORACIÓN COMPLETA: TODAS LAS MEDIDAS EN FORMULARIO, HISTORIAL Y GRÁFICA
+const MET=[['kg','Peso','kg'],['grasa','% grasa','%'],['cuello','Cuello','cm'],['hombros','Hombros','cm'],['pecho','Pecho','cm'],['cintura','Cintura','cm'],['abdomen','Abdomen','cm'],['cadera','Cadera','cm'],['brazo','Brazo','cm'],['muslo','Muslo','cm'],['pantorrilla','Pantorrilla','cm']],mval=(x,k)=>k==='cintura'?(x.cintura??x.ci):k==='brazo'?(x.brazo??x.br):x[k];
+D.clients.slice(0,5).forEach(c=>{const n=c.weights.length;c.weights.forEach((x,i)=>{const f=i/(n-1);Object.assign(x,{grasa:+(26-f*3.5).toFixed(1),cuello:+(34-f*.4).toFixed(1),hombros:+(104+f*2).toFixed(1),pecho:+(92+f*2.5).toFixed(1),cintura:+(80-f*5).toFixed(1),abdomen:+(86-f*6).toFixed(1),cadera:+(99-f*2).toFixed(1),brazo:+(30+f*1.5).toFixed(1),muslo:+(57+f*1.2).toFixed(1),pantorrilla:+(36+f*.6).toFixed(1)})});const l=c.weights[n-1];Object.assign(c.meas,{cintura:l.cintura,cadera:l.cadera,brazo:l.brazo})});
+function addW(){const c=cur(),r={d:'14 nov',by:S.role==='cl'?'Laura':'Carlos'};MET.forEach(m=>{const v=$('#m_'+m[0]).value;if(v!=='')r[m[0]]=+v});if(r.kg===undefined){toast('Escribe al menos el peso');return}c.weights.push(r);['cintura','cadera','brazo'].forEach(k=>{if(r[k]!==undefined)c.meas[k]=r[k]});notify(S.role==='cl'?'tr':'cl',(S.role==='cl'?c.n:'Carlos')+' registró una valoración: '+r.kg+' kg',c.id,'progreso');R();toast('Valoración guardada')}
+// REGLA: valoraciones completas (MET), grafica por medida, historial desplegable y paginado.
+function progV(c){const w=c.weights,last=w[w.length-1]||{},mk=S.wm||'kg',mm=MET.find(m=>m[0]===mk),ser=w.map(x=>({d:x.d,v:mval(x,mk)})).filter(x=>x.v!==undefined&&x.v!==''&&x.v!=null),vs=ser.map(x=>+x.v),mx=Math.max(...vs,1),mn=vs.length?Math.min(...vs):0,pts=ser.map((x,i)=>[20+i*(260/Math.max(ser.length-1,1)),100-(x.v-mn+.1)/(mx-mn+.2)*80]),l=w.slice().reverse(),P5=5,pages=Math.max(1,Math.ceil(l.length/P5)),pg=Math.min(S.wpg||1,pages),v=l.slice((pg-1)*P5,pg*P5),has=(x,m)=>mval(x,m[0])!==undefined&&mval(x,m[0])!=='';
+return `${chartV(c)}<details class="card" ${S.rg===false?'':'open'} ontoggle="S.rg=this.open"><summary style="cursor:pointer;font-weight:600">Valoraciones y medidas <span class="chip">${w.length}</span></summary>
+<div class="grid" style="margin-top:12px;align-items:start"><div class="card" style="margin:0"><h2>${mm[1]} (${mm[2]})</h2><div class="row" style="margin-bottom:8px">${MET.map(m=>`<button class="btn s" style="${mk===m[0]?'background:var(--ink);color:var(--bg)':''}" onclick="S.wm='${m[0]}';R()">${m[1]}</button>`).join('')}</div>${ser.length?`<svg viewBox="0 0 300 120" width="100%" role="img" aria-label="Gráfica de ${mm[1]}"><text x="2" y="22" font-size="8" fill="var(--mut)">${mx}</text><text x="2" y="104" font-size="8" fill="var(--mut)">${mn}</text><polyline fill="none" stroke="var(--acc)" stroke-width="3" points="${pts.map(p=>p.join(',')).join(' ')}"/>${pts.map((p,i)=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="var(--acc)"/>${i%3===0||i===pts.length-1?`<text x="${p[0]}" y="116" font-size="9" text-anchor="middle" fill="var(--mut)">${ser[i].d}</text>`:''}`).join('')}</svg>`:'<p class="mut">Sin registros de esta medida.</p>'}<div class="sm mut" style="margin:8px 0 4px">Última valoración${last.d?' ('+last.d+')':''}</div><div class="row sm">${MET.filter(m=>has(last,m)).map(m=>`<span class="chip">${m[1]} ${mval(last,m[0])} ${m[2]}</span>`).join('')}</div></div>
+<div class="card" style="margin:0"><h2>Nueva valoración</h2><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px">${MET.map(m=>`<div><label for="m_${m[0]}" class="sm">${m[1]} (${m[2]})${m[0]==='kg'?' *':''}</label><input id="m_${m[0]}" type="number" step=".1" value="${has(last,m)?mval(last,m[0]):''}"></div>`).join('')}</div><p class="sm mut">* Obligatorio. Las demás medidas son opcionales.</p><button class="btn p" onclick="addW()">Guardar valoración</button></div></div>
+<details class="card" style="margin:12px 0 0" ${S.hv?'open':''} ontoggle="S.hv=this.open"><summary style="cursor:pointer;font-weight:600">Historial de valoraciones <span class="chip">${w.length}</span></summary><div style="margin-top:8px"></div>${v.map(x=>`<div class="row sp" style="padding:8px 0;border-top:1px solid var(--line);align-items:flex-start"><div><b>${x.d}</b><span class="sm mut"> · ${x.by||''}</span><div class="sm mut">${MET.filter(m=>m[0]!=='kg'&&has(x,m)).map(m=>m[1]+' '+mval(x,m[0])+m[2]).join(' · ')}</div></div><b>${x.kg} kg</b></div>`).join('')||'<p class="mut">Aún sin valoraciones.</p>'}${l.length>P5?`<div class="row sp sm mut" style="margin-top:8px"><span>Página ${pg} de ${pages}</span><span class="row"><button class="btn s" ${pg<=1?'disabled':''} onclick="S.wpg=${pg-1};R()">Anterior</button><button class="btn s" ${pg>=pages?'disabled':''} onclick="S.wpg=${pg+1};R()">Siguiente</button></span></div>`:''}</details></details>`}
+// NAVEGACIÓN POR SEMANAS: SOLO SE REGISTRA EL DÍA ACTUAL
+const isToday=(c,d)=>dayDate(c,d)===14;
+const rwd=(c,i)=>c.routine[i].wd!==undefined&&c.routine[i].time?c.routine[i].wd:({2:[0,3],3:[0,2,4],4:[0,1,3,4],5:[0,1,2,3,4],6:[0,1,2,3,4,5]}[c.days]||[0,2,4])[i];
+const exLine=e=>`<div class="ex"><b>${esc(e.n)}</b> <span class="sm mut">Meta: ${e.s} × ${e.r}${e.t==='seg'?' s':' reps'}</span></div>`;
+function viewNote(c,d,isTr){const n=dayDate(c,d),can=n&&n>14&&!isDone(c,d,n);
+return `<p class="sm mut" style="margin-top:8px">${n&&n>14?'Este entrenamiento se podrá registrar el '+n+' de noviembre.':n&&isDone(c,d,n)?'Entrenamiento completado.':n&&n<14?'Este día ya pasó sin entrenamiento registrado.':'Sin fecha asignada esta semana.'}</p>${can?`<div class="row" style="margin-bottom:8px"><button class="btn" onclick="ppOpen(${n})">${isTr?'Aplazar o mover entrenamiento':'Solicitar aplazar o mover'}</button><button class="btn" onclick="cancelOpen(${n})">Cancelar entrenamiento</button></div>`:''}${n&&isDone(c,d,n)?d.ex.map(e=>exPast(c,e,new Date(2026,10,n,12))).join(''):d.ex.map(exLine).join('')}`}
+function roV(c,o){return `<p class="sm mut">${o<0?'Semana anterior: solo consulta.':'Semana siguiente: aún no se puede registrar.'}</p>`+c.routine.map((d,i)=>{const w=rwd(c,i),dt=w===undefined?null:new Date(2026,10,9+7*o+w,12);return `<details class="card day" ${i===0?'open':''}><summary><b>${esc(d.n)}</b><span class="row"><span class="sm mut" style="font-weight:400">${dt?WD[w]+' '+dmy(dt)+(c.sch&&d.time?' · '+d.time+(d.end?'–'+d.end:''):''):'Sin fecha'}</span><span class="chip ${o<0?'ok':''}">${o<0?'Completado':'Programada'}</span></span></summary>${d.ex.map(e=>o<0&&dt?exPast(c,e,dt):exLine(e)).join('')}</details>`}).join('')}
+// REGLA: navegacion por semanas; anteriores solo consulta con detalle, siguientes solo consulta.
+function rutinaVweek(isTr){const c=cur(),o=S.wo||0,n=Math.floor((TD-new Date(c.start))/6048e5)+1+o,mon=new Date(2026,10,9+7*o,12),sun=new Date(2026,10,15+7*o,12);
+return `<div class="row sp" style="margin-bottom:10px"><div class="row"><button class="btn s" aria-label="Semana anterior" ${n<=1?'disabled':''} onclick="S.wo=${o-1};R()">‹</button><span class="chip">Semana ${n} de entrenamiento · ${dmy(mon)} – ${dmy(sun)}</span><button class="btn s" aria-label="Semana siguiente" ${o>=8?'disabled':''} onclick="S.wo=${o+1};R()">›</button>${o?`<button class="btn s" onclick="S.wo=0;R()">Semana actual</button>`:''}</div><span class="sm mut">${o===0?'Solo se registra el entrenamiento del día actual':o<0?'Semana anterior · solo consulta':'Semana siguiente · aún no se puede registrar'}</span></div>`+(o===0?rutinaVcur(isTr):roV(c,o))}
+// DETALLE DE EJERCICIOS EN SEMANAS ANTERIORES (DATOS DE EJEMPLO)
+// SIMULADO: detalle de ejercicios de semanas anteriores.
+function exPast(c,e,dt){const st=new Date((c.chartFrom||c.start)+'T12:00:00'),k=Math.round((dt-st)/864e5);if(k<0)return exLine(e);const n=Math.sin(k*1.7+hash(e.n)),base=bw(e.n),w=e.t==='seg'?0:Math.round(base*(1+k*.0008+n*.03)*2)/2,r=Math.max(5,Math.round(e.r+n*2.2));
+return `<div class="ex"><div class="row sp"><b>${esc(e.n)}</b><span class="sm mut">Meta: ${e.s} × ${e.r}${e.t==='seg'?' s':' reps'}</span></div><div class="sets">${Array.from({length:e.s},(_,i)=>`<div class="set done"><div class="sm mut">Serie ${i+1}</div><b>${e.t==='seg'?Math.max(5,r-Math.floor(i/2))+' s':w+' kg × '+Math.max(4,r-Math.floor(i/2))}</b></div>`).join('')}</div></div>`}
+const exDet=(c,d,day)=>day>=9&&day<=15&&d.ex.some(e=>e.logs.some(Boolean))?exSum(d):d.ex.map(e=>exPast(c,e,new Date(2026,10,day,12))).join('');
+const bw=n=>({'Press de banca':40,'Press inclinado con mancuernas':16,'Fondos en paralelas':10,'Dominadas asistidas':20,'Remo con barra':35,'Sentadilla':50,'Peso muerto rumano':45,'Press militar':25})[n]||18+hash(n)%30;
+// LIBRARY + ROUTINE EDITOR
+D.groups=['Pecho','Espalda','Pierna','Hombro','Bíceps','Tríceps','Core','Glúteo'];
+const EQ=['Barra','Mancuernas','Polea','Máquina','Peso corporal'];
+D.lib=[['Press de banca','Pecho','Barra'],['Press inclinado con mancuernas','Pecho','Mancuernas'],['Aperturas en polea','Pecho','Polea'],['Fondos en paralelas','Pecho','Peso corporal'],['Flexiones','Pecho','Peso corporal'],['Dominadas asistidas','Espalda','Máquina'],['Remo con barra','Espalda','Barra'],['Jalón al pecho','Espalda','Polea'],['Sentadilla','Pierna','Barra'],['Peso muerto rumano','Pierna','Barra'],['Prensa de pierna','Pierna','Máquina'],['Press militar','Hombro','Barra'],['Elevaciones laterales','Hombro','Mancuernas'],['Curl con barra','Bíceps','Barra'],['Curl martillo','Bíceps','Mancuernas'],['Extensión en polea','Tríceps','Polea'],['Press francés','Tríceps','Barra'],['Patada de tríceps','Tríceps','Mancuernas'],['Plancha','Core','Peso corporal','seg'],['Crunch en polea','Core','Polea'],['Hip thrust','Glúteo','Barra'],['Patada de glúteo','Glúteo','Polea']].map((x,i)=>({id:i+1,n:x[0],g:x[1],eq:x[2],t:x[3]||'reps',own:false,by:'Superadmin'}));
+D.lib.push({id:99,n:'Press de banca agarre cerrado',g:'Pecho',eq:'Barra',t:'reps',own:true,by:'Carlos Ruiz'});
+function libV(sa){const cnt=g=>D.lib.filter(x=>x.g===g).length;
+return `${sa?crumbs([['Inicio',"nv('dash')"],['Biblioteca']]):'<a href="#" onclick="S.lib=0;R();return false" style="color:var(--acc)" class="sm">‹ Volver</a>'}<div class="row sp"><div><h1>Biblioteca de ejercicios</h1><div class="mut">${sa?'Todos los ejercicios son visibles para todos. Tú puedes editar o eliminar cualquiera.':'Todos los ejercicios son visibles para todos. Solo puedes editar los que creaste tú. Antes de crear uno nuevo, el buscador te avisa si ya existe.'}</div></div><button class="btn p" onclick="exForm(${sa})">+ Nuevo ejercicio</button></div>
+<div class="row" style="align-items:flex-start;margin-top:14px"><div class="card" style="min-width:170px">${D.groups.map(g=>`<button class="btn s" style="display:flex;justify-content:space-between;width:100%;margin-bottom:6px;${S.lg===g?'background:var(--ink);color:var(--bg)':''}" onclick="S.lg='${g}';R()"><span>${g}</span><span>${cnt(g)}</span></button>`).join('')}</div><div class="grow" style="min-width:260px">${false?'':`<div class="row" style="margin-bottom:8px">${[['todos','Todos'],['base','Base'],['mis',sa?'De entrenadores':'Mis ejercicios']].map(f=>`<button class="btn s" style="${S.lt===f[0]?'background:var(--ink);color:var(--bg)':''}" onclick="S.lt='${f[0]}';R()">${f[1]}</button>`).join('')}</div>`}<input placeholder="Buscar ejercicio…" aria-label="Buscar ejercicio" value="${esc(S.lq||'')}" style="margin-bottom:10px" oninput="S.lq=this.value;$('#ll').innerHTML=llV(${sa})"><div id="ll">${llV(sa)}</div></div></div>`}
+function llV(sa){const q=(S.lq||'').toLowerCase(),l=D.lib.filter(x=>x.g===S.lg&&(S.lt==='base'?!x.own:S.lt==='mis'?x.own:true)&&x.n.toLowerCase().includes(q));
+return `<h2>${S.lg} · ${l.length} ejercicios</h2>`+(l.map(x=>`<div class="card row sp" style="padding:12px"><div><b>${x.n}</b> <span class="chip ${x.own?'warn':''}">${x.own?(x.by==='Carlos Ruiz'&&!sa?'Tuyo':'Entrenador'):'Base'}</span><div class="sm mut">${x.eq} · Creado por ${x.by}</div></div><div class="row">${!sa&&x.by!=='Carlos Ruiz'?`<span class="sm mut">Solo lectura</span>`:`<button class="btn s" onclick="exForm(${sa},${x.id})">Editar</button><button class="btn s" onclick="delEx(${x.id})">Eliminar</button>`}</div></div>`).join('')||'<p class="mut">No hay ejercicios aquí. Crea el primero con “Nuevo ejercicio”.</p>')}
+function delEx(id){D.lib=D.lib.filter(x=>x.id!==id);R();toast('Ejercicio eliminado')}
+function exForm(sa,id,dup){const x=D.lib.find(y=>y.id===id)||{g:S.lg||'Pecho',eq:'Barra',n:'',ins:'',v:''};
+modal(`<h2>${id&&!dup?'Editar ejercicio':dup?'Duplicar y editar':'Nuevo ejercicio'}</h2><label for="x1">Nombre del ejercicio</label><input id="x1" autocomplete="off" oninput="dupChk(${id||0})" value="${esc(x.n)}"><div id="sug" aria-live="polite"></div><div class="grid" style="margin:8px 0"><div><label for="x2">Grupo muscular</label><select id="x2">${D.groups.map(g=>`<option ${g===x.g?'selected':''}>${g}</option>`).join('')}</select></div><div><label for="x3">Equipo</label><select id="x3">${EQ.map(g=>`<option ${g===x.eq?'selected':''}>${g}</option>`).join('')}</select></div></div><label for="x4">Instrucciones (opcional)</label><textarea id="x4" rows="2">${esc(x.ins||'')}</textarea><label for="x5" style="margin-top:8px">Enlace de video (opcional)</label><input id="x5" placeholder="https://" value="${esc(x.v||'')}"><div class="row" style="margin-top:14px;justify-content:flex-end"><button class="btn" onclick="mc()">Cancelar</button><button id="xs" class="btn p" onclick="saveEx(${sa},${id||0},${!!dup})">Guardar ejercicio</button></div>`)}
+function saveEx(sa,id,dup){const n=$('#x1').value.trim();if(!n){toast('Escribe el nombre');return}if(dupMatches(n,id).some(m=>m[1]>=.99)){toast('Ese ejercicio ya existe');return}const v={n,g:$('#x2').value,eq:$('#x3').value,ins:$('#x4').value,v:$('#x5').value};
+if(id&&!dup)Object.assign(D.lib.find(y=>y.id===id),v);else D.lib.push({id:Date.now(),t:'reps',own:!sa,by:sa?'Superadmin':'Carlos Ruiz',...v});mc();R();toast('Ejercicio guardado')}
+function openEd(){const r=JSON.parse(JSON.stringify(cur().routine));r.forEach((d,i)=>{d.g=[...new Set(d.ex.map(e=>(D.lib.find(x=>x.n===e.n)||{}).g).filter(Boolean))];d.auto=d.n===genName(d,i)});S.ed={day:0,r,q:'',base:JSON.stringify(r)};R()}
+const ED=()=>S.ed.r[S.ed.day];
+function ed(i,k,v){ED().ex[i][k]=v}
+function mv(i,s){const x=ED().ex,j=i+s;if(j<0||j>=x.length)return;[x[i],x[j]]=[x[j],x[i]];R()}
+function rm(i){ED().ex.splice(i,1);R()}
+function te(id){const x=D.lib.find(y=>y.id===id),d=ED(),k=d.ex.findIndex(e=>e.n===x.n);if(k>=0)d.ex.splice(k,1);else d.ex.push({n:x.n,s:cur().s,r:x.t==='seg'?45:cur().r,rest:90,t:x.t,note:'',last:'',logs:[]});R()}
+function tg(g){const d=ED(),i=d.g.indexOf(g);i>=0?d.g.splice(i,1):d.g.push(g);if(d.auto!==false)d.n=genName(d,S.ed.day);R()}
+function addDay(){S.ed.r.push({n:'Día '+(S.ed.r.length+1),comment:'',ex:[],g:[],auto:true});S.ed.day=S.ed.r.length-1;R()}
+function saveEd(){const c=cur();c.routine=S.ed.r.map(d=>({n:d.n,comment:d.comment||'',ex:d.ex,wd:d.wd,time:d.time,end:d.end,real:d.real}));c.days=c.routine.length;notify('cl','Carlos actualizó tu rutina',c.id,'rutina');if(c.sch&&c.routine.some(hasSch))notify('cl','Carlos te asignó horario de entrenamiento',c.id,'rutina');S.ed=null;R();toast('Rutina guardada')}
+function avV(){const E=S.ed,d=ED(),q=E.q.toLowerCase();return d.g.length?d.g.map(g=>`<div class="sm mut" style="margin-top:8px">${g}</div>`+D.lib.filter(x=>x.g===g&&x.n.toLowerCase().includes(q)).map(x=>`<label style="font-weight:400;display:flex;gap:8px;padding:5px 0"><input type="checkbox" style="width:auto" ${d.ex.some(e=>e.n===x.n)?'checked':''} onchange="te(${x.id})">${x.n}${x.own?' <span class="chip warn">Propio</span>':''}</label>`).join('')).join(''):'<p class="mut">Elige uno o más grupos musculares.</p>'}
+const selV=(e,i)=>`<div class="ex" ondragover="event.preventDefault();this.style.background='var(--fill)'" ondragleave="this.style.background=''" ondrop="dp(${i})"><div class="row sp"><div><b><span draggable="true" title="Arrastra para reordenar" aria-label="Arrastrar para reordenar" style="cursor:grab;font-size:18px;padding:0 4px" ondragstart="dg=${i};event.dataTransfer.setDragImage(this.closest('.ex'),10,10)">⠿</span> ${e.n}</b><div class="sm mut">${(D.lib.find(x=>x.n===e.n)||{}).g||''}</div></div><div class="row"><button class="btn s" aria-label="Subir" onclick="mv(${i},-1)">↑</button><button class="btn s" aria-label="Bajar" onclick="mv(${i},1)">↓</button><button class="btn s" aria-label="Quitar" onclick="rm(${i})">✕</button></div></div><div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(80px,1fr));margin-top:6px">${[['Series','s'],[e.t==='seg'?'Segundos':'Reps','r'],['Descanso (s)','rest']].map(f=>`<div><label class="sm">${f[0]}</label><input type="number" value="${e[f[1]]}" onchange="ed(${i},'${f[1]}',+this.value)"></div>`).join('')}<div><label class="sm">Medida</label><select onchange="ed(${i},'t',this.value);R()"><option value="reps" ${e.t!=='seg'?'selected':''}>Reps</option><option value="seg" ${e.t==='seg'?'selected':''}>Tiempo</option></select></div></div><input style="margin-top:6px" placeholder="Nota (tempo, RPE, técnica)" value="${esc(e.note||'')}" onchange="ed(${i},'note',this.value)"></div>`;
+function edV(){const E=S.ed,c=cur(),d=ED();
+return `<a href="#" onclick="exitEd();return false" style="color:var(--acc)" class="sm">‹ Volver a ${c.n}</a><div class="row sp"><div><h1>Configurar rutina</h1><div class="mut">${c.n} · elige los grupos musculares de cada día y luego sus ejercicios</div></div><span class="row"><button class="btn" onclick="tplApply()">Aplicar plantilla</button><button class="btn" onclick="tplSave()">Guardar como plantilla</button><button class="btn p" onclick="saveEd()">Guardar rutina</button></span></div>
+<div class="tabs">${E.r.map((x,i)=>`<button class="tab ${i===E.day?'on':''}" onclick="S.ed.day=${i};R()">Día ${i+1}</button>`).join('')}<button class="tab" style="color:var(--acc)" onclick="addDay()">+ Día</button></div>
+<div class="card"><div class="row sp"><label for="dn">Nombre del día</label>${E.r.length>1?'<button class="btn s" onclick="rmDay()">Quitar este día</button>':''}</div><input id="dn" value="${esc(d.n)}" oninput="ED().n=this.value;ED().auto=this.value.trim()===''"><div style="margin-top:10px">${schSwitch(cur())}</div>${cur().sch?`<div class="row" style="margin-top:10px;align-items:flex-end"><div><label for="sw">Día de la semana</label><select id="sw" style="width:auto" onchange="sch('wd',this.value)"><option value="">Sin horario</option>${WD.map((x,i)=>`<option value="${i}" ${d.wd===i?'selected':''}>${x}</option>`).join('')}</select></div><div><label for="st">Hora de inicio</label><input id="st" type="time" style="width:auto" value="${d.time||''}" onchange="sch('time',this.value)"></div><div><label for="se">Hora de fin</label><input id="se" type="time" style="width:auto" value="${d.end||''}" onchange="sch('end',this.value)"></div><span class="sm mut">Opcional. El cliente lo verá en su rutina.</span></div>`:'<p class="sm mut" style="margin-top:10px">Este cliente no tiene horario asignado: él registrará a qué hora entrena. Actívalo con “Horario asignado” en la ficha del cliente.</p>'}
+<div class="sm" style="font-weight:600;margin:10px 0 6px">Grupos musculares de este día (puedes combinar varios)</div><div class="row">${D.groups.map(g=>`<button class="btn s" style="border-radius:99px;${d.g.includes(g)?'background:var(--soft);border-color:var(--acc);color:var(--acc)':''}" onclick="tg('${g}')">${d.g.includes(g)?'✓ ':''}${g}</button>`).join('')}</div></div>
+<div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start"><div class="card"><h2>Ejercicios disponibles</h2><input placeholder="Buscar ejercicio…" aria-label="Buscar ejercicio" value="${esc(E.q)}" oninput="S.ed.q=this.value;$('#avl').innerHTML=avV()"><div id="avl">${avV()}</div><button class="btn s" style="margin-top:8px" onclick="exForm(false)">+ Crear ejercicio nuevo</button></div><div class="card"><h2>Ejercicios del día · ${d.ex.length} seleccionados</h2>${d.ex.map((e,i)=>selV(e,i)).join('')||'<p class="mut">Elige un grupo y marca ejercicios para empezar.</p>'}</div></div>`}
+// CLIENT
+function clientV(){S.cid=1;const c=cur(),t=S.tab==='resumen'?'rutina':S.tab;S.tab=t;
+return `<h1>Mi entrenamiento</h1><div class="mut">Tu entrenador: ${D.trainers.find(x=>x.id===c.tid).n} · Plan de ${c.days} días / semana</div>${c.sch&&c.routine.some(hasSch)?`<div class="sm" style="margin-top:4px">Tu horario: ${c.routine.filter(hasSch).sort((a,b)=>a.wd-b.wd).map(d=>WS[d.wd]+' '+d.time+(d.end?'–'+d.end:'')).join(' · ')}</div>`:''}${c.pay!=='ok'?`<div class="banner" style="margin-top:10px">Tu plan vence el ${c.due}</div>`:`<div class="sm mut" style="margin-top:4px">Tu plan vence el ${c.due}</div>`}
+<div class="tabs">${[['rutina','Rutina'],['progreso','Mi progreso'],['nutricion','Plan nutricional']].map(x=>`<button class="tab ${t===x[0]?'on':''}" onclick="S.tab='${x[0]}';R()">${x[1]}</button>`).join('')}</div>${t==='rutina'?rutinaV(false):t==='progreso'?progV(c):nutV(false)}`}
+R();
+</script></body></html>
